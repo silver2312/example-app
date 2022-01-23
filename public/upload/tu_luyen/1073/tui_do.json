@@ -1,0 +1,100 @@
+[
+    {
+        "tuido_vannang": {
+            "10": {
+                "so_luong": 0
+            },
+            "2": {
+                "so_luong": 0,
+                "su_dung": 18
+            },
+            "6": {
+                "so_luong": 1
+            },
+            "7": {
+                "so_luong": 0,
+                "su_dung": 20
+            },
+            "8": {
+                "so_luong": 0,
+                "su_dung": 120
+            },
+            "9": {
+                "so_luong": 0,
+                "su_dung": 1
+            },
+            "1": {
+                "so_luong": 0,
+                "su_dung": 43
+            },
+            "3": {
+                "so_luong": 98,
+                "su_dung": 6
+            },
+            "4": {
+                "so_luong": 6,
+                "su_dung": 14
+            }
+        },
+        "tuido_dotpha": {
+            "7": {
+                "so_luong": 5815
+            },
+            "10": {
+                "so_luong": 6
+            },
+            "4": {
+                "so_luong": 10
+            },
+            "11": {
+                "so_luong": 1
+            },
+            "12": {
+                "so_luong": 0
+            },
+            "13": {
+                "so_luong": 0
+            },
+            "5": {
+                "so_luong": 22
+            }
+        },
+        "tuido_nguyenlieu": {
+            "14": {
+                "so_luong": 42294
+            },
+            "10": {
+                "so_luong": 536
+            },
+            "5": {
+                "so_luong": 27
+            },
+            "11": {
+                "so_luong": 608
+            },
+            "8": {
+                "so_luong": 685
+            },
+            "15": {
+                "so_luong": 26
+            }
+        },
+        "cong_phap": {
+            "6": {
+                "so_luong": 1
+            },
+            "2": {
+                "so_luong": 37
+            },
+            "1": {
+                "so_luong": 82
+            },
+            "7": {
+                "so_luong": 11
+            },
+            "3": {
+                "so_luong": 1
+            }
+        }
+    }
+]

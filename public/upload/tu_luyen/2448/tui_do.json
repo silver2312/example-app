@@ -1,0 +1,24 @@
+[
+    {
+        "tuido_vannang": {
+            "1": {
+                "so_luong": 0,
+                "su_dung": 45
+            },
+            "2": {
+                "so_luong": 0,
+                "su_dung": "1"
+            }
+        },
+        "tuido_dotpha": {
+            "7": {
+                "so_luong": 12
+            }
+        },
+        "tuido_nguyenlieu": {
+            "14": {
+                "so_luong": 1
+            }
+        }
+    }
+]

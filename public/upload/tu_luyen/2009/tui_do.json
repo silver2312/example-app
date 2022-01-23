@@ -1,0 +1,42 @@
+[
+    {
+        "tuido_vannang": {
+            "10": {
+                "so_luong": 0
+            },
+            "2": {
+                "so_luong": 0,
+                "su_dung": 1
+            },
+            "6": {
+                "so_luong": 0,
+                "su_dung": 1
+            },
+            "7": {
+                "so_luong": 7,
+                "su_dung": 13
+            },
+            "8": {
+                "so_luong": 3,
+                "su_dung": 7
+            },
+            "9": {
+                "so_luong": 1
+            },
+            "5": {
+                "so_luong": 0,
+                "su_dung": 1
+            }
+        },
+        "tuido_dotpha": {
+            "7": {
+                "so_luong": 4582
+            }
+        },
+        "cong_phap": {
+            "4": {
+                "so_luong": 0
+            }
+        }
+    }
+]

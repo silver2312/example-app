@@ -1,0 +1,40 @@
+[
+    {
+        "tuido_dotpha": {
+            "7": {
+                "so_luong": 561
+            },
+            "4": {
+                "so_luong": 0
+            }
+        },
+        "tuido_vannang": {
+            "10": {
+                "so_luong": 0
+            },
+            "2": {
+                "so_luong": 1
+            },
+            "6": {
+                "so_luong": 1
+            },
+            "7": {
+                "so_luong": 21
+            },
+            "8": {
+                "so_luong": 10
+            },
+            "9": {
+                "so_luong": 2
+            },
+            "3": {
+                "so_luong": 0
+            }
+        },
+        "cong_phap": {
+            "1": {
+                "so_luong": 1
+            }
+        }
+    }
+]

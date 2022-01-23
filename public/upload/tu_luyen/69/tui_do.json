@@ -1,0 +1,83 @@
+[
+    {
+        "tuido_vannang": {
+            "9": {
+                "so_luong": 9
+            },
+            "10": {
+                "so_luong": 0
+            },
+            "2": {
+                "so_luong": 0
+            },
+            "6": {
+                "so_luong": 1
+            },
+            "7": {
+                "so_luong": 0,
+                "su_dung": "9"
+            },
+            "8": {
+                "so_luong": 0,
+                "su_dung": "19"
+            },
+            "3": {
+                "so_luong": 0
+            },
+            "4": {
+                "so_luong": 0
+            }
+        },
+        "tuido_dotpha": {
+            "7": {
+                "so_luong": 23070
+            },
+            "4": {
+                "so_luong": 0
+            },
+            "5": {
+                "so_luong": 1
+            },
+            "6": {
+                "so_luong": "1"
+            }
+        },
+        "tuido_nguyenlieu": {
+            "5": {
+                "so_luong": 594
+            },
+            "10": {
+                "so_luong": 623
+            },
+            "14": {
+                "so_luong": 39211
+            },
+            "8": {
+                "so_luong": 544
+            },
+            "11": {
+                "so_luong": 455
+            },
+            "12": {
+                "so_luong": 508
+            },
+            "3": {
+                "so_luong": 503
+            },
+            "15": {
+                "so_luong": 307
+            }
+        },
+        "cong_phap": {
+            "2": {
+                "so_luong": 51
+            },
+            "1": {
+                "so_luong": 321
+            },
+            "8": {
+                "so_luong": 0
+            }
+        }
+    }
+]
