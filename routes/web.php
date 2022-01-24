@@ -240,6 +240,9 @@ Route::prefix('creator')->middleware('checkpwd2','verified','auth','creator')->g
     Route::get('truyen/{host}/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'chapter']);
     Route::get('dsc/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
     Route::get('trans/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'trans']);
+    Route::get('truyen/cap-nhat', [App\Http\Controllers\HomeController::class, 'update']);
+    Route::get('truyen/tim-kiem', [App\Http\Controllers\HomeController::class, 'tim_kiem']);
+
     Route::prefix('trang-ca-nhan')->group(function () {
         Route::get('/{id}', [App\Http\Controllers\ProfileController::class, 'index']);
     });

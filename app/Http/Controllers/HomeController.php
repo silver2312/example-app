@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\NapTienModel;
 use App\Models\User;
 use App\Models\Truyen\Truyen;
+use App\Models\Truyen\TruyenSub;
 use Illuminate\Pagination\Paginator;
 
 class HomeController extends Controller
@@ -25,6 +26,22 @@ class HomeController extends Controller
         $truyen_update = Truyen::whereNotNull('nguon')->orderBy('time_up', 'desc')->take(6)->get();
 
         return view('home')->with(compact('truyen_nhung','truyen_update'));
+    }
+    public function update(){
+        $truyen = Truyen::whereNotNull('nguon')->orderBy('time_up', 'desc')->paginate(24);
+        $title = "Truyện mới cập nhật";
+        return view('layouts.truyen')->with(compact('truyen','title'));
+    }
+    public function tim_kiem(){
+        $tu_khoa = $_GET['tu_khoa'];
+        $truyen_sub = TruyenSub::where('tieu_de','like','%'.$tu_khoa.'%')->orWhere('gioi_thieu','like','%'.$tu_khoa.'%')->orWhere('tac_gia','like','%'.$tu_khoa.'%')->get();
+        $id = [];
+        foreach ($truyen_sub as $key => $value) {
+            $id[] = $value->id;
+        }
+        $truyen = Truyen::whereIn('id',$id)->paginate(24);
+        $title = "Truyện có liên quan đến từ khóa: ".$tu_khoa;
+        return view('layouts.truyen')->with(compact('truyen','title'));
     }
     public function nap_tien(Request $request){
         $data = $request->validate([

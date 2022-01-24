@@ -52,7 +52,7 @@ use App\Models\Truyen\TruyenSub;
                         ?>
                             <div class="col-md-2 col-sm-4 col-4">
                                 <div class="card">
-                                    <img src="{{ $value_nhung->img }}" alt="dsa" class="card-img-top img_custom" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" >
+                                    <img src="{{ $value_nhung->img }}" alt="dsa" class="card-img-top img_custom" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" rel="tooltip" data-html="true" data-placement="bottom" title="{!! $tieu_de !!}">
                                     <div class="card-body text-center">
                                         <a href="{{ url('truyen/'.$value_nhung->nguon.'/'.$value_nhung->id) }}" class="wrd font-weight-bold" rel="tooltip" data-html="true" title="{!! $tieu_de !!}">{!! $tieu_de !!}</a>
                                         <small class="wrd">{!! $tac_gia !!}</small>
@@ -72,7 +72,7 @@ use App\Models\Truyen\TruyenSub;
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <h5 class="card-header">Truyện Mới cập nhật <a href="#!" class="float-right">Xem thêm</a></h5>
+                <h5 class="card-header">Truyện Mới cập nhật <a href="{{ url('truyen/cap-nhat') }}" class="float-right">Xem thêm</a></h5>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
@@ -96,7 +96,7 @@ use App\Models\Truyen\TruyenSub;
                                             <a href="{{ url('truyen/'.$value_update->nguon.'/'.$value_update->id) }}"><img src="{{ $value_update->img }}" class="card-img-top p-1" alt="{{$tieu_de}}" style="height:70px;" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" ></a>
                                         </div>
                                         <div class="card-body col-10" style="flex:none;">
-                                            <span class="font-weight-bold wrd">{{$tieu_de_up}}</span>
+                                            <span class="font-weight-bold wrd" rel="tooltip" data-html="true" title="{!! $tieu_de_up !!}">{{$tieu_de_up}}</span>
                                             <small class="wrd" >{!! check_name($value_update->nguoi_nhung) !!}</small>
                                             <small class="wrd">{{$tac_gia_up}} - {{$value_update->time_up}}</small>
                                         </div>

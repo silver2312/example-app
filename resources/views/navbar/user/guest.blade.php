@@ -43,4 +43,13 @@
         </ul>
       </div>
     </div>
-  </nav>
+</nav>
+
+<div class="row  justify-content-center mt-2">
+    @include('layouts.tim_truyen')
+    <span class="d-sm-none">
+        <a class="nav-link" href="#!" data-action="search-show" data-target="#navbar-search-main">
+            <i class="ni ni-zoom-split-in"></i>
+        </a>
+    </span>
+</div>

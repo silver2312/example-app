@@ -281,6 +281,10 @@ class TuLuyenController extends Controller
                 $user->ngan_te = $user->ngan_te - $ngan_te;
                 $user->kim_te = $user->kim_te - $kim_te;
                 $user->save();
+                $user_nhan->dong_te = $user_nhan->dong_te + $dong_te;
+                $user_nhan->ngan_te = $user_nhan->ngan_te + $ngan_te;
+                $user_nhan->kim_te = $user_nhan->kim_te + $kim_te;
+                $user_nhan->save();
             }else{
                 return Redirect()->back()->with('error','Bạn không đủ tiền để nhận đồ');
             }
