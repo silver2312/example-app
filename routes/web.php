@@ -127,7 +127,7 @@ Route::group(['middleware'=>['auth','verified']], function(){
         Route::post('/doi-tien', [App\Http\Controllers\HomeController::class, 'doi_tien']);
         Route::prefix('truyen')->group(function () {
             Route::post('nhung', [App\Http\Controllers\Truyen\NhungController::class, 'nhung']);
-            Route::get('{host}/{id}/dsc', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
+            Route::get('cua-toi', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'cua_toi']);
         });
     });
 });
@@ -238,11 +238,14 @@ Route::prefix('creator')->middleware('checkpwd2','verified','auth','creator')->g
     Route::get('truyen/{host}/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'index']);
     Route::get('truyen/{host}/{id}/fetch_data', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'fetch_data']);
     Route::get('truyen/{host}/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'chapter']);
+    Route::get('dsc/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
+    Route::get('trans/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'trans']);
     Route::prefix('trang-ca-nhan')->group(function () {
         Route::get('/{id}', [App\Http\Controllers\ProfileController::class, 'index']);
     });
     Route::get('/check-user', function () {
         check_file();
+        check_nhung();
         check_truyen_sub();
         if(Auth::check()){
             try{

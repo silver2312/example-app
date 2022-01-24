@@ -11,12 +11,17 @@
             <div class="modal-body">
                 <form method="POST" action="{{url('truyen/nhung')}}">
                     @csrf
+                    <div class="form-group">
+                        <label>Nguồn hỗ trợ</label>
+                        <br>
+                        <a href="https://www.230book.net/" target="_blank" class="btn btn-sm btn-primary">230book</a>
+                    </div>
                     <div class="form-group mb-3">
                         <div class="input-group input-group-merge input-group-alternative">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="ni ni-sound-wave"></i></span>
                             </div>
-                            <input class="form-control" placeholder="Nhập url" type="url" name="link" autocomplete="off">
+                            <input class="form-control" placeholder="Nhập url truyện" type="url" name="link" autocomplete="off">
                         </div>
                     </div>
                     <div class="text-center">

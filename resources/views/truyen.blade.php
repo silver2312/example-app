@@ -4,7 +4,7 @@
 <style>
     .bg_truyen{
         border-bottom:none;
-        background-image: url({{check_link_img($truyen->img)}});
+        background-image: url({{$truyen->img}});
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -47,7 +47,7 @@
                             <span ><i class="fa fa-gift"></i>&nbsp;{{ format_text($truyen->gift) }} </span>
                         </div>
                     </div>
-                    <p class="mt-2">{!! $truyen_sub->gioi_thieu !!}</p>
+                    <p class="mt-2 p-2 left">{!! $truyen_sub->gioi_thieu !!}</p>
                 </div>
             </div>
         </div>

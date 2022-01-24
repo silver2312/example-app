@@ -30,6 +30,9 @@ class TruyenAuthController extends Controller
         if(isset($data_chapter)){
             $data_chapter = $this->paginate($data_chapter);
         }
+        if(empty($truyen_sub)){
+            $truyen_sub = $truyen;
+        }
         return view('truyen')->with(compact('truyen','user','data_chapter','truyen_sub'));
     }
     public function chapter($host,$id,$position){
@@ -54,20 +57,96 @@ class TruyenAuthController extends Controller
         $po_min = min($po);
         $po_max = max($po);
         if(empty($data_chapter[$position]['noi_dung']) || empty($data_chapter[$position]['noi_dung_sub'])){
-            $client = new Client();
             $get_url = get_url($host,$truyen->link).'/'.$data_chapter[$position]['link'];
             if($get_url == 0){
                 return redirect()->back()->with('error', 'Link bị lỗi.');
             }
-            $crawler = $client->request('GET', $get_url);
-            $check = get_data_chapter($host,$position,$data_chapter,$id,$crawler);
-            if($check == 0){
-                return redirect()->back()->with('error', 'Chương lỗi.');
+            $check1 = get_data_chapter($host,$position,$data_chapter,$truyen);
+            $check = get_data_chapter_sub($host,$position,$data_chapter,$truyen);
+            if($check1 == 0 || $check == 0){
+                return redirect()->back()->with('error', 'Link bị lỗi.');
             }
+            $data_chapter[$position]['noi_dung'] = $check1;
+            $data_chapter[$position]['noi_dung_sub'] = $check;
+            save_chapter($data_chapter,$truyen->id);
         }
         $data_chapter = data_chapter($id);
-        return view('chapter')->with(compact('truyen','user','data_chapter','position','po_min','po_max'));
+        if($position > $po_min){
+            $min = $position - 1;
+        }else{
+            $min = $po_min;
+        }
+        if($position < $po_max){
+            $max = $position + 1;
+        }else{
+            $max = $po_max;
+            $url = get_url($truyen->nguon,$truyen->link);
+            $arr = get_chapter($host,$url,$data_chapter,$id,$truyen);
+            if($arr == 0){
+                return redirect()->back()->with('error', 'Có lỗi xảy ra.');
+            }
+        }
+        try{
+            $header = $data_chapter[$position]['header_sub'];
+        }catch(\Exception $e){
+            $header = $data_chapter[$position]['header'];
+        }
+        return view('chapter')->with(compact('truyen','user','data_chapter','position','min','max','header'));
     }
+    public function cua_toi(){
+        $truyen = Truyen::orderBy('time_up', 'desc')->where('nguoi_nhung',auth()->user()->id)->paginate(21);
+        $truyen_c = Truyen::where('nguoi_nhung',auth()->user()->id)->get();
+        try{
+            $count = count($truyen_c);
+        }catch(\Exception $e){
+            $count = 0;
+        }
+        return view('pages.truyen')->with(compact('truyen','count'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function paginate($items, $perPage = 21, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);

@@ -38,16 +38,26 @@ use App\Models\Truyen\TruyenSub;
                     <div class="row">
                         @foreach ($truyen_nhung as $key_nhung => $value_nhung)
                         <?php
-                        $nhung_sub = TruyenSub::find($value_nhung->id);
+                            $nhung_sub = TruyenSub::find($value_nhung->id);
+                            try{
+                                $tieu_de = $nhung_sub->tieu_de;
+                            }catch(Exception $e){
+                                $tieu_de = $value_nhung->tieu_de;
+                            }
+                            try{
+                                $tac_gia = $nhung_sub->tac_gia;
+                            }catch(Exception $e){
+                                $tac_gia = $value_nhung->tac_gia;
+                            }
                         ?>
                             <div class="col-md-2 col-sm-4 col-4">
                                 <div class="card">
                                     <img src="{{ $value_nhung->img }}" alt="dsa" class="card-img-top img_custom" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" >
                                     <div class="card-body text-center">
-                                        <a href="{{ url('truyen/'.$value_nhung->nguon.'/'.$value_nhung->id) }}" class="wrd font-weight-bold">{!! $nhung_sub->tieu_de !!}</a>
-                                        <small class="wrd">{!! $nhung_sub->tac_gia !!}</small>
-                                        <small><a class="wrd" href="{{ url('trang-ca-nhan/'.$value_nhung->nguoi_nhung) }}">{!! check_name($value_nhung->nguoi_nhung) !!}</a></small>
-                                        <small><span><i class="ni ni-like-2"></i> {{format_text($value_nhung->tong_like)}}</span> <span><i class="ni ni-like-2" style="transform: rotate(180deg);"></i> {{format_text($value_nhung->dislike)}}</span> <span><i class="ni ni-book-bookmark"></i> {{format_text($value_nhung->tu)}}</span></small>
+                                        <a href="{{ url('truyen/'.$value_nhung->nguon.'/'.$value_nhung->id) }}" class="wrd font-weight-bold" rel="tooltip" data-html="true" title="{!! $tieu_de !!}">{!! $tieu_de !!}</a>
+                                        <small class="wrd">{!! $tac_gia !!}</small>
+                                        <small class="wrd" >{!! check_name($value_nhung->nguoi_nhung) !!}</small>
+                                        <small><span><i class="ni ni-like-2"></i> {{format_text($value_nhung->tong_like)}}</span> <span><i class="ni ni-like-2" style="transform: rotate(180deg);"></i> {{format_text($value_nhung->dislike)}}</span> <span><i class="fas fa-book"></i> {{format_text($value_nhung->so_chuong)}}</span></small>
                                     </div>
                                 </div>
                             </div>
@@ -69,16 +79,26 @@ use App\Models\Truyen\TruyenSub;
                             @foreach($truyen_update as $key_update => $value_update)
                                 <?php
                                     $nhung_update = TruyenSub::find($value_update->id);
+                                    try{
+                                        $tieu_de_up = $nhung_update->tieu_de;
+                                    }catch(Exception $e){
+                                        $tieu_de_up = $value_update->tieu_de;
+                                    }
+                                    try{
+                                        $tac_gia_up = $nhung_update->tac_gia;
+                                    }catch(Exception $e){
+                                        $tac_gia_up = $value_update->tac_gia;
+                                    }
                                 ?>
                                 <div class="card">
                                     <div class="row">
-                                        <div class="col-2 p-1 pl-2 pt-2">
-                                            <img src="{{ $value_update->img }}" class="card-img-top" alt="{{$nhung_update->tieu_de}}" style="max-height:70px;" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" >
+                                        <div class="col-2">
+                                            <a href="{{ url('truyen/'.$value_update->nguon.'/'.$value_update->id) }}"><img src="{{ $value_update->img }}" class="card-img-top p-1" alt="{{$tieu_de}}" style="height:70px;" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" ></a>
                                         </div>
-                                        <div class="col-10 card-body">
-                                            <a href="{{ url('truyen/'.$value_update->nguon.'/'.$value_update->id) }}" class="font-weight-bold wrd">{{$nhung_update->tieu_de}}</a>
-                                            <small><a class="wrd" href="{{ url('trang-ca-nhan/'.$value_nhung->nguoi_nhung) }}">{!! check_name($value_nhung->nguoi_nhung) !!}</a></small>
-                                            <small class="wrd">{{$nhung_update->tac_gia}} - {{$value_update->time_up}}</small>
+                                        <div class="card-body col-10" style="flex:none;">
+                                            <span class="font-weight-bold wrd">{{$tieu_de_up}}</span>
+                                            <small class="wrd" >{!! check_name($value_update->nguoi_nhung) !!}</small>
+                                            <small class="wrd">{{$tac_gia_up}} - {{$value_update->time_up}}</small>
                                         </div>
                                     </div>
                                 </div>

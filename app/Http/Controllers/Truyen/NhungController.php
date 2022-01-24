@@ -32,7 +32,8 @@ class NhungController extends Controller
         }
         $iset = Truyen::where('link',$link)->where('nguon',$host)->get();
         if(count($iset) > 0){
-            return redirect()->back()->with('error','Truyện đã tồn tại');
+            $new = Truyen::where('link',$link)->where('nguon',$host)->first();
+            return redirect('truyen/'.$new->nguon.'/'.$new->id)->with('error','Truyện đã tồn tại');
         }
         $client = new Client();
         $get_url = get_url($host,$link);
@@ -66,7 +67,12 @@ class NhungController extends Controller
         $truyen->save();
         check_nhung();
         check_truyen_sub();
-        return redirect()->back()->with('status','Đã nhúng truyện.');
+        try{
+            $new_truyen = Truyen::orderBy('time_up', 'desc')->where('nguoi_nhung',Auth::user()->id)->first();
+            return redirect('truyen/'.$new_truyen->nguon.'/'.$new_truyen->id)->with('status','Đã nhúng truyện.');
+        }catch(Throwable $e){
+            return redirect()->back()->with('error', 'Đã có lỗi xảy ra.');
+        }
     }
     public function dsc($host,$id){
         $truyen = Truyen::find($id);
@@ -80,11 +86,8 @@ class NhungController extends Controller
             $truyen->save();
         }
         $url = get_url($truyen->nguon,$truyen->link);
-        $client = new Client();
-        $crawler = $client->request('GET', $url);
         $data_chapter = data_chapter($id);
-        $a = 0;
-        $arr = get_chapter($host,$crawler,$data_chapter,$id,$truyen);
+        $arr = get_chapter($host,$url,$data_chapter,$id,$truyen);
         if($arr == 0){
             return redirect()->back()->with('error', 'Có lỗi xảy ra.');
         }

@@ -1,12 +1,24 @@
 <div class="card">
-    <div class="card-header font-weight-bold">Danh sách chương @if(isset($truyen->link))<a class="float-right" href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/dsc') }}"><i class='fas fa-redo'></i></a>@endif</div>
+    <div class="card-header font-weight-bold">
+        Danh sách chương
+        @if(isset($truyen->link))
+            <a class="float-right btn btn-sm btn-primary" href="{{ url('dsc/'.$truyen->nguon.'/'.$truyen->id) }}" rel="tooltip" title="Lấy danh sách chương"><i class='fas fa-redo'></i></a>
+        @endif
+    </div>
     <div class="card-body">
         <div class="row">
             @if(isset($data_chapter))
                 @foreach ($data_chapter as $key => $chapter)
+                    <?php
+                        try{
+                            $header = $chapter['header_sub'];
+                        }catch(Exception $e){
+                                $header = $data_chapter['header'];
+                        }
+                    ?>
                     <div class="col-md-4">
                         <div class="card-header" style="padding:3px;">
-                            <a href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$key) }}" style="text-transform: capitalize;font-size:13px;" class="wrd p-1">Chương {{$key}}: {{$chapter['header_sub']}}</a>
+                            <a href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$key) }}" style="text-transform: capitalize;font-size:13px;" class="wrd p-1">Chương {{$key+1}}: {{$header}}</a>
                         </div>
                     </div>
                 @endforeach

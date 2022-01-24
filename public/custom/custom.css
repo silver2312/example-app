@@ -4,15 +4,6 @@
     text-overflow: ellipsis;
     display: block;
 }
-
-.img_custom{
-    height:236px;
-}
-@media (max-width: 479px) {
-    .img_custom{
-        height:140px;
-    }
-}
 title{
     text-transform: capitalize;
     display: block;

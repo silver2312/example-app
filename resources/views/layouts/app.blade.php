@@ -39,6 +39,16 @@
     </script>
 </head>
 <body class="g-sidenav-hidden">
+    <style>
+    .img_custom{
+        height:236px;
+    }
+    @media (max-width: 479px) {
+        .img_custom{
+            height:140px;
+        }
+    }
+    </style>
     @auth
         @include('navbar.user.auth.left')
     @endauth
@@ -89,8 +99,8 @@
     <script type="text/javascript" src="{{ asset('/custom/all.js')}}"></script>
     <script type="text/javascript" src="{{ asset('/custom/jquery.ddslick.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('/custom/toastr.min.js') }}"></script>
-    <script src="{{ asset('assets/js/argon.js?v=1.1.0')}}"></script>
     <script src="{{ asset('assets/js/demo.min.js')}}"></script>
+    <script src="{{ asset('assets/js/argon.js?v=1.1.0')}}"></script>
     @include('custom.script')
     @include('custom.error')
 </body>
