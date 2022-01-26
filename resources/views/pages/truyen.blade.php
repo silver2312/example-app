@@ -69,8 +69,8 @@
                             <div class="modal-body">
                                 <div class="table-responsive">
                                     <div class="row">
-                                        <div class="col-6">{{ $value->gioi_thieu }}</div>
-                                        <div class="col-6">{{ $gioi_thieu }}</div>
+                                        <div class="col-6">{!! $value->gioi_thieu !!}</div>
+                                        <div class="col-6">{!! $gioi_thieu !!}</div>
                                     </div>
                                 </div>
                             </div>

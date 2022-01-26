@@ -53,7 +53,7 @@
         @include('navbar.user.auth.left')
     @endauth
     <div class="main-content" id="panel">
-        @include('navbar.sitebar')
+            @include('navbar.sitebar')
         @auth
             @include('navbar.user.auth.top')
         @endauth

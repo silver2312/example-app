@@ -368,10 +368,14 @@ function get_host($url){
         return 0;
     }
 }
-function get_link($url){
+function get_link($url,$host){
     $cut = explode('/', $url)[4];
     try{
-        return $cut;
+        if($host == "230book"){
+            return $cut;
+        }elseif($host == "trxs"){
+            return explode('.', $cut)[0];
+        }
     }catch(Throwable $e){
         return 0;
     }
@@ -394,14 +398,33 @@ function get_header($host,$crawler){
         $arr = array(
             'tieu_de' => $tieu_de,
             'gioi_thieu' => $gioi_thieu,
-            'tac_gia' => $tac_gia,
+            'tac_gia' => explode('：',$tac_gia)[1],
             'img' => $img,
         );
         return $arr;
     }elseif($host == "uukanshu"){
         return 0;
     }elseif($host == "trxs"){
-        return 0;
+        $tieu_de = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > h1')->text();
+        try{
+            $gioi_thieu = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > p')->html();
+        }catch(Throwable $e){
+            $gioi_thieu = "Đọc truyện ".$tieu_de;
+        }
+        $tac_gia = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > div.date > span > a')->text();
+        $img = "https://trxs.cc".$crawler->filter('body > div.readContent > div.book_info.clearfix > div.pic > img')->attr('src');
+        if (@getimagesize($img)) {
+            $img = $img;
+        } else {
+            $img = "https://i.imgur.com/hQRlkUR.png";
+        }
+        $arr = array(
+            'tieu_de' => $tieu_de,
+            'gioi_thieu' => $gioi_thieu,
+            'tac_gia' => $tac_gia,
+            'img' => $img,
+        );
+        return $arr;
     }else{
         return 0;
     }
@@ -524,16 +547,17 @@ function get_url($host,$link){
     }elseif($host == "uukanshu"){
         return 0;
     }elseif($host == "trxs"){
-        return 0;
+        $url = "https://trxs.cc/tongren/".$link.'.html';
+        return $url;
     }else{
         return 0;
     }
 }
 function get_chapter($host,$url,$data_chapter,$id,$truyen){
+    $a = 0;
+    $i = 1;
+    $client = new Client();
     if($host == "230book"){
-        $a = 0;
-        $i = 1;
-        $client = new Client();
         $new_url = "http://dichtienghoa.com/translate/www.230book.net?u=".$url."&t=vi";
         $crawler = $client->request('GET', $new_url);
         $crawler_old = $client->request('GET', $url);
@@ -563,7 +587,38 @@ function get_chapter($host,$url,$data_chapter,$id,$truyen){
             $truyen->save();
         }
         return $i;
-    }else{
+    }elseif($host == "trxs"){
+        $new_url = "http://dichtienghoa.com/translate/trxs.cc?u=".$url."&t=vi";
+        $crawler = $client->request('GET', $new_url);
+        $crawler_old = $client->request('GET', $url);
+        try{
+            foreach($crawler_old->filter('body > div.readContent > div.book_list.clearfix > ul > li > a') as $key => $node){
+                if(empty($data_chapter[$key]) || empty($data_chapter[$key]['link'])){
+                    $a = 1;
+                    $data_chapter[$key]['header'] = $node->textContent;
+                    $data_chapter[$key]['link'] = explode('/', $node->attributes->getNamedItem('href')->nodeValue)[3];
+                    save_chapter($data_chapter,$id);
+                }
+            }
+        }catch(Throwable $e){
+            $i = 0;
+        }
+        try{
+            foreach($crawler->filter('body > div.readContent > div.book_list.clearfix > ul > li > a') as $keysub => $nodesub){
+                $data_chapter[$keysub]['header_sub'] = $nodesub->textContent;
+            }
+            save_chapter($data_chapter,$id);
+        }catch(Throwable $e){
+            $i = 0;
+        }
+        if($a == 1){
+            $truyen->so_chuong	= count($data_chapter);
+            $truyen->time_up = Carbon::now('Asia/Ho_Chi_Minh');
+            $truyen->save();
+        }
+        return $i;
+    }
+    else{
         return 0;
     }
 }
@@ -589,7 +644,22 @@ function check_truyen_sub(){
                     $truyen_sub->tieu_de = $tieu_de;
                     $truyen_sub->tac_gia = $tac_gia;
                     $truyen_sub->gioi_thieu = $gioi_thieu;
-                }else{
+                }elseif($value->nguon == "trxs"){
+                    $url = get_url($value->nguon,$value->link);
+                    $client = new Client();
+                    $new_url = "http://dichtienghoa.com/translate/trxs.cc?u=".$url."&t=vi";
+                    $crawler = $client->request('GET', $new_url);
+                    $tieu_de = explode('(', $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > h1')->text())[0];
+                    $tac_gia = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > div.date > span > a')->text();
+                    $gioi_thieu = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > p')->html();
+                    if(empty($gioi_thieu)){
+                        $gioi_thieu = "Đọc truyện ".$tieu_de." của ".$tac_gia." tại http://www.230book.net";
+                    }
+                    $truyen_sub->tieu_de = $tieu_de;
+                    $truyen_sub->tac_gia = $tac_gia;
+                    $truyen_sub->gioi_thieu = $gioi_thieu;
+                }
+                else{
                     $truyen_sub->tieu_de = $value->tieu_de;
                     $truyen_sub->tac_gia = $value->tac_gia;
                     $truyen_sub->gioi_thieu = $value->gioi_thieu;
@@ -604,8 +674,8 @@ function check_truyen_sub(){
     }
 }
 function get_data_chapter($position,$data_chapter,$truyen){
+    $client = new Client();
     if($truyen->nguon == "230book"){
-        $client = new Client();
         $get_url = "http://www.230book.net/book/".$truyen->link.'/'.$data_chapter[$position]['link'];
         $crawler = $client->request('GET', $get_url);
         try{
@@ -617,6 +687,25 @@ function get_data_chapter($position,$data_chapter,$truyen){
         $crawler1 = $client->request('GET', $get_url1);
         try{
             $str1 = $crawler1->filter('#content')->html();
+        }catch(Throwable $e){
+            return 0;
+        }
+        $data_chapter[$position]['noi_dung'] = $str;
+        $data_chapter[$position]['noi_dung_sub'] = $str1;
+        save_chapter($data_chapter,$truyen->id);
+        return 1;
+    }elseif($truyen->nguon == "trxs"){
+        $get_url = "https://trxs.cc/tongren/".$truyen->link.'/'.$data_chapter[$position]['link'];
+        $crawler = $client->request('GET', $get_url);
+        try{
+            $str = $crawler->filter('#readContent_set > div.readDetail > div.read_chapterDetail')->html();
+        }catch(Throwable $e){
+            return 0;
+        }
+        $get_url1 = "http://dichtienghoa.com/translate/trxs.cc?u=".$get_url."&t=vi";
+        $crawler1 = $client->request('GET', $get_url1);
+        try{
+            $str1 = $crawler1->filter('#readContent_set > div.readDetail > div.read_chapterDetail')->html();
         }catch(Throwable $e){
             return 0;
         }
@@ -668,7 +757,14 @@ function get_the_loai($host,$crawler,$id_truyen){
     }elseif($host == "uukanshu"){
         return 0;
     }elseif($host == "trxs"){
-        return 0;
+        try{
+            $data_theloai = data_theloai($id_truyen);
+            $data_theloai[34]['ten'] = "Đồng nhân";
+            save_theloai($data_theloai,$id_truyen);
+            return 1;
+        }catch(Throwable $e){
+            return 0;
+        }
     }else{
         return 0;
     }

@@ -140,31 +140,27 @@
         $('#tbl_naptien').dataTable();
      } );
 </script>
- {{-- check vip --}}
- @if(Auth::check() )
-     @if(Auth::user()->level == 4)
-     <script>
-         function check_vip() {
-             var http = new XMLHttpRequest();
-             var url = '{{url("check-vip")}}';
-             http.open('GET', url, true);
-             http.send();
-             http.onreadystatechange = function() {
-                 if (http.readyState == 4 && http.status == 200) {
-                     // Typical action to be performed when the document is ready:
-                     if(http.responseText.search('over_vip') > 0){
-                         location.reload();
-                     }
-                 }
-             };
-         }
-         check_vip();
-         var time = setInterval(check_vip, 600000);
-     </script>
-     @elseif(Auth::user()->level > 4)
-         @include('custom.ads')
-     @endif
- @endif
+{{-- check vip --}}
+    @if(Auth::check() &&Auth::user()->level == 4)
+        <script>
+            function check_vip() {
+                var http = new XMLHttpRequest();
+                var url = '{{url("check-vip")}}';
+                http.open('GET', url, true);
+                http.send();
+                http.onreadystatechange = function() {
+                    if (http.readyState == 4 && http.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        if(http.responseText.search('over_vip') > 0){
+                            location.reload();
+                        }
+                    }
+                };
+            }
+            check_vip();
+            var time = setInterval(check_vip, 600000);
+        </script>
+    @endif
  {{-- end check vip --}}
 {{-- modal close --}}
     <script>
@@ -174,3 +170,10 @@
     </script>
 {{-- end modal close --}}
 @yield('script_ll')
+@guest
+    @include('custom.ads')
+@else
+    @if(Auth::user()->level > 4)
+        @include('custom.ads')
+    @endif
+@endguest

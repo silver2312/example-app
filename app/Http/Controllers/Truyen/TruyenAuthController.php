@@ -57,10 +57,6 @@ class TruyenAuthController extends Controller
         $po_min = min($po);
         $po_max = max($po);
         if(empty($data_chapter[$position]['noi_dung']) || empty($data_chapter[$position]['noi_dung_sub'])){
-            $get_url = get_url($host,$truyen->link).'/'.$data_chapter[$position]['link'];
-            if($get_url == 0){
-                return redirect()->back()->with('error', 'Link bị lỗi.');
-            }
             $arr = get_data_chapter($position,$data_chapter,$truyen);
             if($arr == 0){
                 return redirect()->back()->with('error', 'Dịch lỗi.');

@@ -23,9 +23,9 @@ class NhungController extends Controller
         ]);
         $url = $data['link'];
         $host = get_host($url);
-        $link = get_link($url);
+        $link = get_link($url,$host);
         if($host == 0){
-            return redirect()->back()->with('error', 'Hệ thống chưa hỗ trợ host này.');
+            return redirect()->back()->with('error', 'Hệ thống chưa hỗ trợ nguồn này.');
         }
         if($link == 0){
             return redirect()->back()->with('error', 'Hệ thống chưa hỗ trợ link này.');
@@ -61,7 +61,7 @@ class NhungController extends Controller
         }
         $truyen->tieu_de = $arr['tieu_de'];
         $truyen->gioi_thieu = $arr['gioi_thieu'];
-        $truyen->tac_gia = explode('：',$arr['tac_gia'])[1];
+        $truyen->tac_gia = $arr['tac_gia'];
         $truyen->img = $arr['img'];
         $truyen->save();
         check_nhung();
