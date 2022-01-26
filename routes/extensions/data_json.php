@@ -216,3 +216,25 @@ function save_chapter($data_chapter,$id){
     $newJsonString = json_encode($data_chapter, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     file_put_contents($truyen->path_chuong, $newJsonString);
 }
+function data_theloai($id){
+    $truyen = PathTruyen::find($id);
+    $json_theloai = file_get_contents($truyen->path_theloai);
+    $data_theloai = json_decode($json_theloai,true);
+    return $data_theloai;
+}
+function save_theloai($data_theloai,$id){
+    $truyen = PathTruyen::find($id);
+    $newJsonString = json_encode($data_theloai, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents($truyen->path_theloai, $newJsonString);
+}
+function data_tag($id){
+    $truyen = PathTruyen::find($id);
+    $json_tag = file_get_contents($truyen->path_tag);
+    $data_tag = json_decode($json_tag,true);
+    return $data_tag;
+}
+function save_tag($data_tag,$id){
+    $truyen = PathTruyen::find($id);
+    $newJsonString = json_encode($data_tag, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents($truyen->path_tag, $newJsonString);
+}

@@ -10,7 +10,6 @@ use App\Models\NapTienModel;
 use App\Models\User;
 use App\Models\Truyen\Truyen;
 use App\Models\Truyen\TruyenSub;
-use Illuminate\Pagination\Paginator;
 
 class HomeController extends Controller
 {
@@ -24,8 +23,8 @@ class HomeController extends Controller
     {
         $truyen_nhung = Truyen::whereNotNull('nguon')->whereNotNull('link')->inRandomOrder()->take(6)->get();
         $truyen_update = Truyen::whereNotNull('nguon')->orderBy('time_up', 'desc')->take(6)->get();
-
-        return view('home')->with(compact('truyen_nhung','truyen_update'));
+        $de_cu = Truyen::where('de_cu', 1)->take(12)->get();
+        return view('home')->with(compact('truyen_nhung','truyen_update','de_cu'));
     }
     public function update(){
         $truyen = Truyen::whereNotNull('nguon')->orderBy('time_up', 'desc')->paginate(24);

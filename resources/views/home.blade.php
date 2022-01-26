@@ -12,16 +12,32 @@ use App\Models\Truyen\TruyenSub;
                 <h5 class="card-header">Truyện đề cử</h5>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-2">
-                            <div class="card">
-                                <img src="https://i.imgur.com/Wqh7gGX.png" alt="dsa" class="card-img-top">
-                                <div class="card-body text-center">
-                                    <span class="wrd font-weight-bold">43243</span>
-                                    <small class="wrd">432432</small>
-                                    <small class="wrd">{{format_text(123)}}</small>
+                        @foreach ($de_cu as $key_dc => $value_dc)
+                        <?php
+                            $nhung_sub_dc = TruyenSub::find($value_dc->id);
+                            try{
+                                $tieu_de_dc = $nhung_sub_dc->tieu_de;
+                            }catch(Throwable $e){
+                                $tieu_de_dc = $value_dc->tieu_de;
+                            }
+                            try{
+                                $tac_gia_dc = $nhung_sub_dc->tac_gia;
+                            }catch(Throwable $e){
+                                $tac_gia_dc = $value_dc->tac_gia;
+                            }
+                        ?>
+                            <div class="col-md-2 col-sm-4 col-4">
+                                <div class="card">
+                                    <img src="{{ $value_dc->img }}" alt="dsa" class="card-img-top img_custom" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" rel="tooltip" data-html="true" data-placement="bottom" title="{!! $tieu_de_dc !!}">
+                                    <div class="card-body text-center">
+                                        <a href="{{ url('truyen/'.$value_dc->nguon.'/'.$value_dc->id) }}" class="wrd font-weight-bold" rel="tooltip" data-html="true" title="{!! $tieu_de_dc !!}">{!! $tieu_de_dc !!}</a>
+                                        <small class="wrd">{!! $tac_gia_dc !!}</small>
+                                        <small class="wrd" >{!! check_name($value_dc->nguoi_nhung) !!}</small>
+                                        <small><span><i class="ni ni-like-2"></i> {{format_text($value_dc->tong_like)}}</span> <span><i class="ni ni-like-2" style="transform: rotate(180deg);"></i> {{format_text($value_dc->dislike)}}</span> <span><i class="fas fa-book"></i> {{format_text($value_dc->so_chuong)}}</span></small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -41,12 +57,12 @@ use App\Models\Truyen\TruyenSub;
                             $nhung_sub = TruyenSub::find($value_nhung->id);
                             try{
                                 $tieu_de = $nhung_sub->tieu_de;
-                            }catch(Exception $e){
+                            }catch(Throwable $e){
                                 $tieu_de = $value_nhung->tieu_de;
                             }
                             try{
                                 $tac_gia = $nhung_sub->tac_gia;
-                            }catch(Exception $e){
+                            }catch(Throwable $e){
                                 $tac_gia = $value_nhung->tac_gia;
                             }
                         ?>
@@ -81,12 +97,12 @@ use App\Models\Truyen\TruyenSub;
                                     $nhung_update = TruyenSub::find($value_update->id);
                                     try{
                                         $tieu_de_up = $nhung_update->tieu_de;
-                                    }catch(Exception $e){
+                                    }catch(Throwable $e){
                                         $tieu_de_up = $value_update->tieu_de;
                                     }
                                     try{
                                         $tac_gia_up = $nhung_update->tac_gia;
-                                    }catch(Exception $e){
+                                    }catch(Throwable $e){
                                         $tac_gia_up = $value_update->tac_gia;
                                     }
                                 ?>

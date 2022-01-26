@@ -5,9 +5,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Goutte\Client;
 use App\Models\User;
 use App\Models\Session;
 use App\Models\Profile;
+use App\Models\Truyen\Truyen;
+
 include('extensions/function.php');
 /*
 |--------------------------------------------------------------------------
@@ -234,6 +237,24 @@ Route::prefix('creator')->middleware('checkpwd2','verified','auth','creator')->g
         Route::post('/khuyen-mai/{id}', [App\Http\Controllers\Creator\Item\NapTienController::class, 'khuyen_mai']);
     });
 });
+Route::prefix('mod')->middleware('checkpwd2','verified','auth','mod')->group(function () {
+    Route::prefix('the-loai')->group(function () {
+        Route::get('/', [App\Http\Controllers\Mod\TheLoaiController::class, 'index']);
+        Route::post('them', [App\Http\Controllers\Mod\TheLoaiController::class, 'them']);
+        Route::post('sua/{id}', [App\Http\Controllers\Mod\TheLoaiController::class, 'sua']);
+    });
+    Route::prefix('tag')->group(function () {
+        Route::get('/', [App\Http\Controllers\Mod\TagContronller::class, 'index']);
+        Route::post('them', [App\Http\Controllers\Mod\TagContronller::class, 'them']);
+        Route::post('sua/{id}', [App\Http\Controllers\Mod\TagContronller::class, 'sua']);
+    });
+    Route::prefix('truyen')->group(function () {
+        Route::get('/', [App\Http\Controllers\Mod\TruyenController::class, 'index']);
+        Route::get('de-cu/{id}', [App\Http\Controllers\Mod\TruyenController::class, 'de_cu']);
+        Route::get('tim-kiem', [App\Http\Controllers\Mod\TruyenController::class, 'tim_kiem']);
+        Route::get('change-img/{id}', [App\Http\Controllers\Mod\TruyenController::class, 'img']);
+    });
+});
 //không cần đăng nhập
     Route::get('truyen/{host}/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'index']);
     Route::get('truyen/{host}/{id}/fetch_data', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'fetch_data']);
@@ -243,17 +264,60 @@ Route::prefix('creator')->middleware('checkpwd2','verified','auth','creator')->g
     Route::get('truyen/cap-nhat', [App\Http\Controllers\HomeController::class, 'update']);
     Route::get('truyen/tim-kiem', [App\Http\Controllers\HomeController::class, 'tim_kiem']);
 
+
     Route::prefix('trang-ca-nhan')->group(function () {
         Route::get('/{id}', [App\Http\Controllers\ProfileController::class, 'index']);
     });
+    Route::get('/check-truyen', function () {
+        try{
+            $truyen = Truyen::get();
+            foreach($truyen as $key => $value){
+                if(isset($value->link)){
+                    $data_theloai = data_theloai($value->id);
+                    try{
+                        $count = count($data_theloai);
+                    }catch (Throwable $e){
+                        $count = 0;
+                    }
+                    if($count == 0){
+                        $truyen1 = Truyen::find($value->id);
+                        $url = get_url($truyen1->nguon,$truyen1->link);
+                        $client = new Client();
+                        $crawler = $client->request('GET', $url);
+                        get_the_loai($truyen1->nguon,$crawler,$value->id);
+                    }
+                    $data_tag = data_tag($value->id);
+                    try{
+                        $count = count($data_tag);
+                    }catch (Throwable $e){
+                        $count = 0;
+                    }
+                    if($count == 0){
+                        $data_tag[1]['ten'] = "khác";
+                        save_tag($data_tag,$value->id);
+                    }
+                }
+            }
+        }catch (Throwable $e){
+            echo "Lỗi thể loại<br>";
+        }
+        try{
+            check_nhung();
+            check_truyen_sub();
+        }catch (Throwable $e){
+            echo "Die<br>";
+        }
+    });
     Route::get('/check-user', function () {
-        check_file();
-        check_nhung();
-        check_truyen_sub();
+        try{
+            check_file();
+        }catch (Throwable $e){
+            echo "Die<br>";
+        }
         if(Auth::check()){
             try{
                 check_log();
-            }catch(\Exception $e){
+            }catch(Throwable $e){
                 echo "TEST";
             }
         }

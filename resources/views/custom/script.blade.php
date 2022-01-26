@@ -102,7 +102,14 @@
     }
     check_user();
     var time = setInterval(check_user, 600000);
-
+    //truyện
+    function check_truyen() {
+        var http = new XMLHttpRequest();
+        var url = '{{url("check-truyen/")}}';
+        http.open('GET', url, true);
+        http.send();
+    }
+    check_truyen();
     //online
         function online() {
             var http = new XMLHttpRequest();

@@ -30,10 +30,9 @@ class NhungController extends Controller
         if($link == 0){
             return redirect()->back()->with('error', 'Hệ thống chưa hỗ trợ link này.');
         }
-        $iset = Truyen::where('link',$link)->where('nguon',$host)->get();
-        if(count($iset) > 0){
-            $new = Truyen::where('link',$link)->where('nguon',$host)->first();
-            return redirect('truyen/'.$new->nguon.'/'.$new->id)->with('error','Truyện đã tồn tại');
+        $iset = Truyen::where('link',$link)->where('nguon',$host)->first();
+        if(isset($iset)){
+            return redirect('truyen/'.$iset->nguon.'/'.$iset->id)->with('error','Truyện đã tồn tại');
         }
         $client = new Client();
         $get_url = get_url($host,$link);

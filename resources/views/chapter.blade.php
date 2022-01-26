@@ -6,16 +6,16 @@
         <div class="row">
             <div class="card">
                 <div class="card-header text-center border-0 pb-0">
-                    <h3 class="card-title" style="text-transform: capitalize;">Chương {{$position+1}}: {{ $header }}</h3>
+                    <h3 class="card-title" style="text-transform: capitalize;">{{ $header }}</h3>
                     <div>
                         <a class="btn btn-sm btn-primary" href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$min) }}"><i class="ni ni-bold-left"></i></a>
                         <a href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id) }}" class="btn btn-sm btn-primary">Mục lục</a>
                         <a class="btn btn-sm btn-primary" href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$max) }}"><i class="ni ni-bold-right"></i></a>
                     </div>
                 </div>
-                <div class="contaier p-5">
+                <div class="contaier p-2">
                     @if(isset($truyen->link))
-                        <small>@Truyện được dịch tại vietphrase</small>
+                        <small>@Truyện được dịch tại dichtienghoa</small>
                         <br>
                         <br>
                     @endif

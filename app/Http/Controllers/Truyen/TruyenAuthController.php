@@ -47,7 +47,7 @@ class TruyenAuthController extends Controller
             $truyen->save();
         }
         $data_chapter = data_chapter($id);
-        if(empty($data_chapter[$position])){
+        if(empty($data_chapter[$position]) || empty($data_chapter[$position]['link'])){
             return redirect('truyen/'.$host.'/'.$id)->with('error', 'Truyện chưa có chương này.');
         }
         $po = [];
@@ -61,14 +61,10 @@ class TruyenAuthController extends Controller
             if($get_url == 0){
                 return redirect()->back()->with('error', 'Link bị lỗi.');
             }
-            $check1 = get_data_chapter($host,$position,$data_chapter,$truyen);
-            $check = get_data_chapter_sub($host,$position,$data_chapter,$truyen);
-            if($check1 == 0 || $check == 0){
-                return redirect()->back()->with('error', 'Link bị lỗi.');
+            $arr = get_data_chapter($position,$data_chapter,$truyen);
+            if($arr == 0){
+                return redirect()->back()->with('error', 'Dịch lỗi.');
             }
-            $data_chapter[$position]['noi_dung'] = $check1;
-            $data_chapter[$position]['noi_dung_sub'] = $check;
-            save_chapter($data_chapter,$truyen->id);
         }
         $data_chapter = data_chapter($id);
         if($position > $po_min){

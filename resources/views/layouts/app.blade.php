@@ -58,9 +58,7 @@
             @include('navbar.user.auth.top')
         @endauth
 
-        <div class="col-12">
-            @yield('content')
-        </div>
+        @yield('content')
     </div>
     <footer class="mt-5">
         <div class="card text-center ">

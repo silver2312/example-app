@@ -372,7 +372,7 @@ function get_link($url){
     $cut = explode('/', $url)[4];
     try{
         return $cut;
-    }catch(\Exception $e){
+    }catch(Throwable $e){
         return 0;
     }
 }
@@ -381,11 +381,16 @@ function get_header($host,$crawler){
         $tieu_de = $crawler->filter('#info > h1')->text();
         try{
             $gioi_thieu = $crawler->filter('#intro > p')->text();
-        }catch(\Exception $e){
+        }catch(Throwable $e){
             $gioi_thieu = "Đọc truyện ".$tieu_de;
         }
         $tac_gia = $crawler->filter('#info > p:nth-child(2)')->text();
         $img = "https://www.230book.net".$crawler->filter('#fmimg > img')->attr('src');
+        if (@getimagesize($img)) {
+            $img = $img;
+        } else {
+            $img = "https://i.imgur.com/hQRlkUR.png";
+        }
         $arr = array(
             'tieu_de' => $tieu_de,
             'gioi_thieu' => $gioi_thieu,
@@ -529,42 +534,24 @@ function get_chapter($host,$url,$data_chapter,$id,$truyen){
         $a = 0;
         $i = 1;
         $client = new Client();
-        $new_url = "http://vietphrase.info/VietPhrase/Browser?url=".$url."&script=false&t=VP";
+        $new_url = "http://dichtienghoa.com/translate/www.230book.net?u=".$url."&t=vi";
         $crawler = $client->request('GET', $new_url);
         $crawler_old = $client->request('GET', $url);
         try{
             foreach($crawler_old->filter('#list > ul > li > a') as $key => $node){
-                if(empty($data_chapter[$key])){
+                if(empty($data_chapter[$key]) || empty($data_chapter[$key]['link'])){
                     $a = 1;
-                    $text = $node->textContent;
-                    $data_chapter[$key]['header'] = $text;
+                    $data_chapter[$key]['header'] = $node->textContent;
                     $data_chapter[$key]['link'] = $node->attributes->getNamedItem('href')->nodeValue;
+                    save_chapter($data_chapter,$id);
                 }
             }
-            save_chapter($data_chapter,$id);
         }catch(Throwable $e){
             $i = 0;
         }
         try{
-            foreach($crawler->filter('#list > ul > li > a') as $key => $node){
-                $text = $node->textContent;
-                try{
-                    $findme   = '::';
-                    $pos = stripos($text, $findme);
-                    if ($pos !== false) {
-                        $data_chapter[$key]['header_sub'] = explode('::', $text)[1];
-                    }else{
-                        $findme1   = ':';
-                        $pos1 = stripos($text, $findme1);
-                        if ($pos1 !== false) {
-                            $data_chapter[$key]['header_sub'] = explode(':', $text)[1];
-                        }else{
-                            $data_chapter[$key]['header_sub'] = explode('Chương', $text)[1];
-                        }
-                    }
-                }catch(Throwable $e){
-                    $data_chapter[$key]['header_sub'] = $text;
-                }
+            foreach($crawler->filter('#list > ul > li > a') as $keysub => $nodesub){
+                $data_chapter[$keysub]['header_sub'] = $nodesub->textContent;
             }
             save_chapter($data_chapter,$id);
         }catch(Throwable $e){
@@ -591,7 +578,7 @@ function check_truyen_sub(){
                 if($value->nguon == "230book"){
                     $url = get_url($value->nguon,$value->link);
                     $client = new Client();
-                    $new_url = "http://vietphrase.info/VietPhrase/Browser?url=".$url."&script=false&t=VP";
+                    $new_url = "http://dichtienghoa.com/translate/www.230book.net?u=".$url."&t=vi";
                     $crawler = $client->request('GET', $new_url);
                     $tieu_de = $crawler->filter('#info > h1')->text();
                     $tac_gia = explode(':', $crawler->filter('#info > p:nth-child(2)')->text())[1];
@@ -616,44 +603,72 @@ function check_truyen_sub(){
         }
     }
 }
-function get_url_trans($host,$link,$url){
-    if($host == "230book"){
-        $url1 = "http://www.230book.net/book/".$link.'/'.$url;
-        return "http://vietphrase.info/VietPhrase/Browser?url=".$url1."&script=false&t=VP";
-    }elseif($host == "uukanshu"){
-        return 0;
-    }elseif($host == "trxs"){
-        return 0;
-    }else{
-        return 0;
-    }
-}
-function get_data_chapter($host,$position,$data_chapter,$truyen){
-    if($host == "230book"){
+function get_data_chapter($position,$data_chapter,$truyen){
+    if($truyen->nguon == "230book"){
         $client = new Client();
         $get_url = "http://www.230book.net/book/".$truyen->link.'/'.$data_chapter[$position]['link'];
         $crawler = $client->request('GET', $get_url);
         try{
             $str = $crawler->filter('#content')->html();
-            return $str;
         }catch(Throwable $e){
             return 0;
         }
+        $get_url1 = "http://dichtienghoa.com/translate/www.230book.net?u=".$get_url."&t=vi";
+        $crawler1 = $client->request('GET', $get_url1);
+        try{
+            $str1 = $crawler1->filter('#content')->html();
+        }catch(Throwable $e){
+            return 0;
+        }
+        $data_chapter[$position]['noi_dung'] = $str;
+        $data_chapter[$position]['noi_dung_sub'] = $str1;
+        save_chapter($data_chapter,$truyen->id);
+        return 1;
     }else{
         return 0;
     }
 }
-function get_data_chapter_sub($host,$position,$data_chapter,$truyen){
+function get_the_loai($host,$crawler,$id_truyen){
     if($host == "230book"){
-        $client = new Client();
-        $get_url = get_url_trans($host,$truyen->link,$data_chapter[$position]['link']);
-        $crawler = $client->request('GET', $get_url);
         try{
-            $str = $crawler->filter('#content')->html();
-            return $str;
+            $the_loai = $crawler->filter('#wrapper > div.box_con > div.con_top')->text();
+            if(strpos($the_loai, '玄幻小说') !== false){
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[1]['ten'] = "Huyền huyễn";
+                save_theloai($data_theloai,$id_truyen);
+            }elseif(strpos($the_loai, '修真小说') !== false){
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[3]['ten'] = "Tu tiên";
+                save_theloai($data_theloai,$id_truyen);
+            }elseif(strpos($the_loai, '都市小说') !== false){
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[4]['ten'] = "Đô thị";
+                save_theloai($data_theloai,$id_truyen);
+            }elseif(strpos($the_loai, '穿越小说') !== false){
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[5]['ten'] = "Xuyên việt";
+                save_theloai($data_theloai,$id_truyen);
+            }elseif(strpos($the_loai, '网游小说') !== false){
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[6]['ten'] = "Võng du";
+                save_theloai($data_theloai,$id_truyen);
+            }elseif(strpos($the_loai, '科幻小说') !== false){
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[7]['ten'] = "Khoa huyễn";
+                save_theloai($data_theloai,$id_truyen);
+            }else{
+                $data_theloai = data_theloai($id_truyen);
+                $data_theloai[2]['ten'] = "khác";
+                save_theloai($data_theloai,$id_truyen);
+            }
+            return 1;
         }catch(Throwable $e){
             return 0;
         }
+    }elseif($host == "uukanshu"){
+        return 0;
+    }elseif($host == "trxs"){
+        return 0;
     }else{
         return 0;
     }

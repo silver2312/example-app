@@ -146,7 +146,7 @@ class LichLuyenController extends Controller
                         }
                     //end thêm tiền
                     //thêm nguyên liệu
-                        $nguyen_lieu = NguyenLieuModel::where('level','<=',$data_thongtin[0]['level'])->where('id','!=',1)->inRandomOrder()->first();
+                        $nguyen_lieu = NguyenLieuModel::where('level','<=',$data_thongtin[0]['level'])->where('id','!=',1)->where('ngan_te',0)->where('kim_te',0)->inRandomOrder()->first();
                         $ty_le = tyle_luck($data_thongtin[0]['may_man']);
                         $result = random($ty_le);
                         if($result == 0){

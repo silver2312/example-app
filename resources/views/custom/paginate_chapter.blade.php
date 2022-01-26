@@ -18,7 +18,7 @@
                     ?>
                     <div class="col-md-4">
                         <div class="card-header" style="padding:3px;">
-                            <a href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$key) }}" style="text-transform: capitalize;font-size:13px;" class="wrd p-1">Chương {{$key+1}}: {{$header}}</a>
+                            <a href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$key) }}" style="text-transform: capitalize;font-size:13px;" class="wrd p-1">{{$header}}</a>
                         </div>
                     </div>
                 @endforeach
