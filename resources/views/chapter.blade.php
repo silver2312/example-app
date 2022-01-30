@@ -15,7 +15,7 @@
                 </div>
                 <div class="contaier p-2">
                     @if(isset($truyen->link))
-                        <small>@Truyện được dịch tại dichtienghoa</small>
+                        <small>@Truyện được dịch tại vietphrase</small>
                         <br>
                         <br>
                     @endif
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example" style="position: fixed;bottom: 0;right: 5px;opacity:0.8;">
+    <nav aria-label="Page navigation example" style="position: fixed;bottom: 0;right: 15px;opacity:0.8;">
         <ul class="pagination">
             <li class="page-item">
                 <a class="page-link" href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$min) }}" aria-label="Previous">
@@ -54,6 +54,17 @@
         </ul>
     </nav>
     @section('script_ll')
+        @if(Auth::check())
+            <script>
+                function dang_doc() {
+                    var http = new XMLHttpRequest();
+                    var url = '{{url("truyen/dang-doc/".$truyen->id."/".$position)}}';
+                    http.open('GET', url, true);
+                    http.send();
+                }
+                dang_doc();
+            </script>
+        @endif
         <script>
             function leftArrowPressed() {
                 window.location.replace("{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$min) }}");

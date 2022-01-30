@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\NapTienModel;
 use App\Models\User;
+use App\Models\ThongBaoModel;
 use App\Models\Truyen\Truyen;
 use App\Models\Truyen\TruyenSub;
 
@@ -21,10 +22,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $truyen_nhung = Truyen::whereNotNull('nguon')->whereNotNull('link')->inRandomOrder()->take(6)->get();
+        $truyen_nhung = Truyen::whereNotNull('nguon')->whereNotNull('link')->inRandomOrder()->take(12)->get();
         $truyen_update = Truyen::whereNotNull('nguon')->orderBy('time_up', 'desc')->take(6)->get();
+        $truyen_like = Truyen::whereNotNull('nguon')->orderBy('tong_like', 'desc')->take(12)->get();
+        $truyen_tu = Truyen::whereNotNull('nguon')->orderBy('tu', 'desc')->take(12)->get();
         $de_cu = Truyen::where('de_cu', 1)->take(12)->get();
-        return view('home')->with(compact('truyen_nhung','truyen_update','de_cu'));
+        $thong_bao = ThongBaoModel::where('tag',0)->first();
+        return view('home')->with(compact('truyen_nhung','truyen_update','de_cu','truyen_like','truyen_tu','thong_bao'));
     }
     public function update(){
         $truyen = Truyen::whereNotNull('nguon')->orderBy('time_up', 'desc')->paginate(24);

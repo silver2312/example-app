@@ -73,12 +73,9 @@ class NhungController extends Controller
             return redirect()->back()->with('error', 'Đã có lỗi xảy ra.');
         }
     }
-    public function dsc($host,$id){
+    public function dsc($id){
         $truyen = Truyen::find($id);
         check_data($truyen);
-        if($truyen->nguon != $host){
-            return redirect()->back()->with('error', 'Truyện đã bị lỗi.');
-        }
         $user = User::find($truyen->nguoi_nhung);
         if(empty($user)){
             $truyen->nguoi_nhung = 0;
@@ -86,7 +83,7 @@ class NhungController extends Controller
         }
         $url = get_url($truyen->nguon,$truyen->link);
         $data_chapter = data_chapter($id);
-        $arr = get_chapter($host,$url,$data_chapter,$id,$truyen);
+        $arr = get_chapter($truyen->nguon,$url,$data_chapter,$id,$truyen);
         if($arr == 0){
             return redirect()->back()->with('error', 'Có lỗi xảy ra.');
         }

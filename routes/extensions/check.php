@@ -213,6 +213,30 @@ function check_file(){
                 fclose($file);
                 $user_path->path_log = $path_log;
             }
+            if(empty($user_path->path_tutruyen) || !file_exists($user_path->path_tutruyen)){
+                $dir = 'upload/tu_luyen/'.$id.'/';
+                if( is_dir($dir) === false )
+                {
+                    mkdir($dir,0777,true);
+                }
+                $ten_file = 'tu_truyen.json';
+                $path_tutruyen = $dir . $ten_file;
+                $file = fopen($path_tutruyen,'w');
+                fclose($file);
+                $user_path->path_tutruyen = $path_tutruyen;
+            }
+            if(empty($user_path->path_dangdoc) || !file_exists($user_path->path_dangdoc)){
+                $dir = 'upload/tu_luyen/'.$id.'/';
+                if( is_dir($dir) === false )
+                {
+                    mkdir($dir,0777,true);
+                }
+                $ten_file = 'dang_doc.json';
+                $path_dangdoc = $dir . $ten_file;
+                $file = fopen($path_dangdoc,'w');
+                fclose($file);
+                $user_path->path_dangdoc = $path_dangdoc;
+            }
             $user_path->save();
             $data_thongtin= data_thongtin($id);
             if(isset($data_thongtin[0]) && $data_thongtin[0]['level'] > 0 ){
@@ -558,7 +582,7 @@ function get_chapter($host,$url,$data_chapter,$id,$truyen){
     $i = 1;
     $client = new Client();
     if($host == "230book"){
-        $new_url = "http://dichtienghoa.com/translate/www.230book.net?u=".$url."&t=vi";
+        $new_url = "http://vietphrase.info/VietPhrase/Browser?url=".$url."&script=false&t=VP";
         $crawler = $client->request('GET', $new_url);
         $crawler_old = $client->request('GET', $url);
         try{
@@ -588,7 +612,7 @@ function get_chapter($host,$url,$data_chapter,$id,$truyen){
         }
         return $i;
     }elseif($host == "trxs"){
-        $new_url = "http://dichtienghoa.com/translate/trxs.cc?u=".$url."&t=vi";
+        $new_url = "http://vietphrase.info/VietPhrase/Browser?url=".$url."&script=false&t=VP";
         $crawler = $client->request('GET', $new_url);
         $crawler_old = $client->request('GET', $url);
         try{
@@ -604,7 +628,7 @@ function get_chapter($host,$url,$data_chapter,$id,$truyen){
             $i = 0;
         }
         try{
-            foreach($crawler->filter('body > div.readContent > div.book_list.clearfix > ul > li > a') as $keysub => $nodesub){
+            foreach($crawler->filter('#html > div.readContent > div.book_list.clearfix > ul > li > a') as $keysub => $nodesub){
                 $data_chapter[$keysub]['header_sub'] = $nodesub->textContent;
             }
             save_chapter($data_chapter,$id);
@@ -633,7 +657,7 @@ function check_truyen_sub(){
                 if($value->nguon == "230book"){
                     $url = get_url($value->nguon,$value->link);
                     $client = new Client();
-                    $new_url = "http://dichtienghoa.com/translate/www.230book.net?u=".$url."&t=vi";
+                    $new_url = "http://vietphrase.info/VietPhrase/Browser?url=".$url."&script=false&t=VP";
                     $crawler = $client->request('GET', $new_url);
                     $tieu_de = $crawler->filter('#info > h1')->text();
                     $tac_gia = explode(':', $crawler->filter('#info > p:nth-child(2)')->text())[1];
@@ -647,13 +671,13 @@ function check_truyen_sub(){
                 }elseif($value->nguon == "trxs"){
                     $url = get_url($value->nguon,$value->link);
                     $client = new Client();
-                    $new_url = "http://dichtienghoa.com/translate/trxs.cc?u=".$url."&t=vi";
+                    $new_url = "http://vietphrase.info/VietPhrase/Browser?url=".$url."&script=false&t=VP";
                     $crawler = $client->request('GET', $new_url);
-                    $tieu_de = explode('(', $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > h1')->text())[0];
-                    $tac_gia = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > div.date > span > a')->text();
-                    $gioi_thieu = $crawler->filter('body > div.readContent > div.book_info.clearfix > div.infos > p')->html();
+                    $tieu_de = explode('(', $crawler->filter('#html > div.readContent > div.book_info.clearfix > div.infos > h1')->text())[0];
+                    $tac_gia = $crawler->filter('#html > div.readContent > div.book_info.clearfix > div.infos > div.date > span > a')->text();
+                    $gioi_thieu = $crawler->filter('#html > div.readContent > div.book_info.clearfix > div.infos > p')->html();
                     if(empty($gioi_thieu)){
-                        $gioi_thieu = "Đọc truyện ".$tieu_de." của ".$tac_gia." tại http://www.230book.net";
+                        $gioi_thieu = "Đọc truyện ".$tieu_de." của ".$tac_gia." tại http://www.trxs.cc";
                     }
                     $truyen_sub->tieu_de = $tieu_de;
                     $truyen_sub->tac_gia = $tac_gia;
@@ -683,7 +707,7 @@ function get_data_chapter($position,$data_chapter,$truyen){
         }catch(Throwable $e){
             return 0;
         }
-        $get_url1 = "http://dichtienghoa.com/translate/www.230book.net?u=".$get_url."&t=vi";
+        $get_url1 = "http://vietphrase.info/VietPhrase/Browser?url=".$get_url."&script=false&t=VP";
         $crawler1 = $client->request('GET', $get_url1);
         try{
             $str1 = $crawler1->filter('#content')->html();
@@ -702,10 +726,10 @@ function get_data_chapter($position,$data_chapter,$truyen){
         }catch(Throwable $e){
             return 0;
         }
-        $get_url1 = "http://dichtienghoa.com/translate/trxs.cc?u=".$get_url."&t=vi";
+        $get_url1 = "http://vietphrase.info/VietPhrase/Browser?url=".$get_url."&script=false&t=VP";
         $crawler1 = $client->request('GET', $get_url1);
         try{
-            $str1 = $crawler1->filter('#readContent_set > div.readDetail > div.read_chapterDetail')->html();
+            $str1 = $crawler1->filter('#readContent_set > div.readDetail')->html();
         }catch(Throwable $e){
             return 0;
         }

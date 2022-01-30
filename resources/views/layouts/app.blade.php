@@ -1,3 +1,9 @@
+<?php
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    if($user_agent == "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)"){
+        abort(404);
+    }
+?>
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -73,7 +79,20 @@
                 ?><span id="ngay">00</span>-<span id="thang">00</span>-<span id="nam">00</span>&nbsp;<span id="gio">00</span>:<span id="phut">00</span>:<span id="giay">00</span>
             </div>
         </div>
+        <nav aria-label="Page navigation example" style="position: fixed;bottom: 40px;right: 15px;opacity:0.8;">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next" data-toggle="modal" data-target="#dang_doc">
+                        <i class="ni ni-bullet-list-67"></i>
+                        <span class="sr-only">Đang đọc</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </footer>
+    @auth
+        @include('modal.modal_dangdoc')
+    @endauth
     <!-- Scripts -->
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js')}}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>

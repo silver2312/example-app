@@ -499,4 +499,13 @@ class ProfileController extends Controller
             return Redirect()->back()->with('error','Mã xác nhận không chính xác.');
         }
     }
+    public function tu_truyen(){
+        $data_tutruyen = data_tutruyen(Auth::user()->id);
+        try{
+            $cout_tutruyen = count($data_tutruyen);
+        }catch(Throwable $e){
+            $cout_tutruyen = 0;
+        }
+        return view('pages.tu_truyen')->with(compact('data_tutruyen','cout_tutruyen'));
+    }
 }

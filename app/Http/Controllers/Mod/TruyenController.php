@@ -53,6 +53,15 @@ class TruyenController extends Controller
         }
         return redirect()->back()->with('staus','Đề cử thành công');
     }
+    public function del_de_cu($id){
+        $truyen = Truyen::find($id);
+        if($truyen->de_cu == 0){
+            return redirect()->back()->with('error','Truyện chưa được đề cử.');
+        }
+        $truyen->de_cu = 0;
+        $truyen->save();
+        return redirect()->back()->with('staus','Xoá đề cử thành công');
+    }
     public function img($id){
         $truyen = Truyen::find($id);
         $truyen->img = "https://i.imgur.com/hQRlkUR.png";

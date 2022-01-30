@@ -129,6 +129,10 @@
                 <i class="ni ni-money-coins"></i>
                 <span>Tài sản</span>
             </a>
+            <a href="{{ url('trang-ca-nhan/tu-truyen') }}" class="dropdown-item">
+                <i class="ni ni-books"></i>
+                <span>Tủ truyện</span>
+            </a>
             <a href="{{ url('trang-ca-nhan/cai-dat') }}" class="dropdown-item">
                 <i class="ni ni-settings-gear-65"></i>
                 <span>Cài đặt</span>

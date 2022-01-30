@@ -118,6 +118,7 @@ Route::group(['middleware'=>['auth','verified']], function(){
             Route::get('quen-ma-cap-2', [App\Http\Controllers\ProfileController::class, 'quen_c2']);
             Route::get('gui-lai-ma', [App\Http\Controllers\ProfileController::class, 'send_again']);
             Route::post('xac-nhan-ma', [App\Http\Controllers\ProfileController::class, 'xn_quen_c2']);
+            Route::get('tu-truyen', [App\Http\Controllers\ProfileController::class, 'tu_truyen']);
         });
         Route::prefix('ky-nang')->group(function () {
             Route::prefix('cong-phap')->group(function () {
@@ -131,6 +132,12 @@ Route::group(['middleware'=>['auth','verified']], function(){
         Route::prefix('truyen')->group(function () {
             Route::post('nhung', [App\Http\Controllers\Truyen\NhungController::class, 'nhung']);
             Route::get('cua-toi', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'cua_toi']);
+            Route::get('dang-doc/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'dang_doc']);
+            Route::get('data-dang-doc', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'data_dangdoc']);
+            Route::get('del-dang-doc/{key}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'del_dd']);
+            Route::get('them-tu/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'them_tu']);
+            Route::get('like/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'like']);
+            Route::get('dislike/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'dislike']);
         });
     });
 });
@@ -236,6 +243,7 @@ Route::prefix('creator')->middleware('checkpwd2','verified','auth','creator')->g
         Route::post('/rep/{id}', [App\Http\Controllers\Creator\Item\NapTienController::class, 'rep']);
         Route::post('/khuyen-mai/{id}', [App\Http\Controllers\Creator\Item\NapTienController::class, 'khuyen_mai']);
     });
+    Route::post('thong-bao-home', [App\Http\Controllers\ThongBaoController::class, 'index']);
 });
 Route::prefix('mod')->middleware('checkpwd2','verified','auth','mod')->group(function () {
     Route::prefix('the-loai')->group(function () {
@@ -251,6 +259,7 @@ Route::prefix('mod')->middleware('checkpwd2','verified','auth','mod')->group(fun
     Route::prefix('truyen')->group(function () {
         Route::get('/', [App\Http\Controllers\Mod\TruyenController::class, 'index']);
         Route::get('de-cu/{id}', [App\Http\Controllers\Mod\TruyenController::class, 'de_cu']);
+        Route::get('xoa-de-cu/{id}', [App\Http\Controllers\Mod\TruyenController::class, 'del_de_cu']);
         Route::get('tim-kiem', [App\Http\Controllers\Mod\TruyenController::class, 'tim_kiem']);
         Route::get('change-img/{id}', [App\Http\Controllers\Mod\TruyenController::class, 'img']);
     });
@@ -258,8 +267,8 @@ Route::prefix('mod')->middleware('checkpwd2','verified','auth','mod')->group(fun
 //không cần đăng nhập
     Route::get('truyen/{host}/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'index']);
     Route::get('truyen/{host}/{id}/fetch_data', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'fetch_data']);
-    Route::get('truyen/{host}/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'chapter']);
-    Route::get('dsc/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
+    Route::get('truyen/{host}/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'chapter'])->middleware('auth');
+    Route::get('dsc/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
     Route::get('trans/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'trans']);
     Route::get('truyen/cap-nhat', [App\Http\Controllers\HomeController::class, 'update']);
     Route::get('truyen/tim-kiem', [App\Http\Controllers\HomeController::class, 'tim_kiem']);

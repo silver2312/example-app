@@ -95,7 +95,79 @@ class TruyenAuthController extends Controller
         }
         return view('pages.truyen')->with(compact('truyen','count'));
     }
-
+    public function dang_doc($id,$position){
+        $truyen = Truyen::find($id);
+        $uid = auth()->user()->id;
+        $data_dangdoc = data_dangdoc($uid);
+        if(empty($data_dangdoc[$id]) || empty($data_dangdoc[$id][$position])){
+            $data_dangdoc[$id]['chapter'] = $position;
+            save_dangdoc($data_dangdoc,$uid);
+        }
+        return "Đã thêm vào danh sách đang đọc.";
+    }
+    public function data_dangdoc(){
+        return view('modal.data_dangdoc');
+    }
+    public function del_dd($key){
+        $data_dangdoc = data_dangdoc(auth()->user()->id);
+        if(isset($data_dangdoc[$key])){
+            unset($data_dangdoc[$key]);
+            save_dangdoc($data_dangdoc,auth()->user()->id);
+        }
+        return "Đã xóa khỏi danh sách đang đọc.";
+    }
+    public function them_tu($id){
+        $data_tutruyen = data_tutruyen((auth()->user()->id));
+        if(isset($data_tutruyen[$id])){
+            return 0;
+        }
+        $data_tutruyen[$id]['id'] = $id;
+        save_tutruyen($data_tutruyen,auth()->user()->id);
+        $truyen = Truyen::find($id);
+        $truyen->tu = $truyen->tu + 1;
+        $truyen->save();
+        return 1;
+    }
+    public function like($id){
+        $data_like = data_like($id);
+        $data_dislike = data_dislike($id);
+        $truyen = Truyen::find($id);
+        if(isset($data_like[auth()->user()->id])){
+            unset($data_like[auth()->user()->id]);
+            save_like($data_like,$id);
+            $truyen->tong_like = $truyen->tong_like - 1;
+            $truyen->save();
+            return 0;
+        }
+        if(isset($data_dislike[auth()->user()->id])){
+            return 1;
+        }
+        $data_like[auth()->user()->id]['id'] = auth()->user()->id;
+        save_like($data_like,$id);
+        $truyen->tong_like = $truyen->tong_like + 1;
+        $truyen->save();
+        return 2;
+    }
+    public function dislike($id){
+        $data_like = data_like($id);
+        $data_dislike = data_dislike($id);
+        $truyen = Truyen::find($id);
+        if(isset($data_dislike[auth()->user()->id])){
+            unset($data_dislike[auth()->user()->id]);
+            save_dislike($data_dislike,$id);
+            $truyen->dislike = $truyen->dislike - 1;
+            $truyen->save();
+            return 0;
+        }
+        if(isset($data_like[auth()->user()->id])){
+            return 1;
+        }
+        $data_dislike[auth()->user()->id]['id'] = auth()->user()->id;
+        save_dislike($data_dislike,$id);
+        $truyen->dislike = $truyen->dislike + 1;
+        $truyen->save();
+        return 2;
+    }
 
 
 

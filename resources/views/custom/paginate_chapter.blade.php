@@ -2,7 +2,7 @@
     <div class="card-header font-weight-bold">
         Danh sách chương
         @if(isset($truyen->link))
-            <a class="float-right btn btn-sm btn-primary" href="{{ url('dsc/'.$truyen->nguon.'/'.$truyen->id) }}" rel="tooltip" title="Lấy danh sách chương"><i class='fas fa-redo'></i></a>
+            <a class="float-right btn btn-sm btn-primary" href="{{ url('dsc/'.$truyen->id) }}" rel="tooltip" title="Lấy danh sách chương"><i class='fas fa-redo'></i></a>
         @endif
     </div>
     <div class="card-body">

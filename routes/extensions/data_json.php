@@ -238,3 +238,47 @@ function save_tag($data_tag,$id){
     $newJsonString = json_encode($data_tag, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     file_put_contents($truyen->path_tag, $newJsonString);
 }
+function data_dangdoc($id){
+    $user_path = UserPath::find($id);
+    $json_dangdoc = file_get_contents($user_path->path_dangdoc);
+    $data_dangdoc = json_decode($json_dangdoc,true);
+    return $data_dangdoc;
+}
+function save_dangdoc($data_dangdoc,$id){
+    $user_path = UserPath::find($id);
+    $newJsonString = json_encode($data_dangdoc, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents($user_path->path_dangdoc, $newJsonString);
+}
+function data_tutruyen($id){
+    $user_path = UserPath::find($id);
+    $json_tutruyen = file_get_contents($user_path->path_tutruyen);
+    $data_tutruyen = json_decode($json_tutruyen,true);
+    return $data_tutruyen;
+}
+function save_tutruyen($data_tutruyen,$id){
+    $user_path = UserPath::find($id);
+    $newJsonString = json_encode($data_tutruyen, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents($user_path->path_tutruyen, $newJsonString);
+}
+function data_like($id){
+    $truyen = PathTruyen::find($id);
+    $json_like = file_get_contents($truyen->path_like);
+    $data_like = json_decode($json_like,true);
+    return $data_like;
+}
+function save_like($data_like,$id){
+    $truyen = PathTruyen::find($id);
+    $newJsonString = json_encode($data_like, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents($truyen->path_like, $newJsonString);
+}
+function data_dislike($id){
+    $truyen = PathTruyen::find($id);
+    $json_dislike = file_get_contents($truyen->path_dislike);
+    $data_dislike = json_decode($json_dislike,true);
+    return $data_dislike;
+}
+function save_dislike($data_dislike,$id){
+    $truyen = PathTruyen::find($id);
+    $newJsonString = json_encode($data_dislike, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    file_put_contents($truyen->path_dislike, $newJsonString);
+}

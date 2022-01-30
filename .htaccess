@@ -3,4 +3,11 @@
 	RewriteEngine On
 	RewriteCond %{REQUEST_URI} !^/public/
 	RewriteRule ^(.*)$ /public/$1 [L,QSA]
+
+    #block bots
+    RewriteCond %{HTTP_USER_AGENT} ^.*(Baiduspider|HTTrack|Yandex).*$ [NC]
+    RewriteRule .* - [F,L]
+    RewriteCond %{HTTP_REFERER} yandex.com [NC,OR]
+    RewriteCond %{HTTP_REFERER} yandex.com/bots
+    RewriteRule .* - [F]
 </IfModule>

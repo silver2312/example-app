@@ -32,7 +32,7 @@ if(isset($truyen->link)){
             <div class="card text-center">
                 <div class="card-header bg_truyen"></div>
                 <div class="card-body" style="z-index: 10">
-                    <img style="max-height:300px;"  src="{{$truyen->img }}" alt="{{$truyen_sub->tieu_de}}" class="pt-5" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" >
+                    <img style="height:325px;width:225px;"  src="{{$truyen->img }}" alt="{{$truyen_sub->tieu_de}}" class="pt-5" onerror="this.src='https://i.imgur.com/hQRlkUR.png';" >
                     <p><h3 ><span style="text-transform: capitalize;"><a href="{{$url}}" target="_blank">{{ $truyen_sub->tieu_de }}</a> - {{ $truyen_sub->tac_gia }}</span></h3></p>
                     <p><a href="{{url('trang-ca-nhan/'.$user->id)}}">{{$user->name}}</a></p>
                     <p>Thể loại:
@@ -66,27 +66,8 @@ if(isset($truyen->link)){
                         ?>
                     </p>
                     <p>{{$truyen->time_suf}} - {{$truyen->time_up}}</p>
-                    <div class="row">
-                        <div class="col-md-2 col-3">
-                            <span ><i class="fas fa-thumbs-up"></i>&nbsp;{{ format_text($truyen->tong_like) }}</span>
-                        </div>
-                        <div class="col-md-2 col-3">
-                            <span ><i class="fas fa-thumbs-down"></i>&nbsp;{{ format_text($truyen->dislike) }}</span>
-                        </div>
-                        <div class="col-md-2 col-3">
-                            <span ><i class="fas fa-book"></i>&nbsp;{{ format_text($truyen->so_chuong) }}</span>
-                        </div>
-                        <div class="col-md-2 col-3">
-                            <span ><i class="fas fa-star-half"></i>&nbsp;@if($truyen->trang_thai == 0)@else Tạm ngưng @endif</span>
-                        </div>
-                        <div class="col-md-2 col-3">
-                            <span><i class="fas fa-bookmark"></i>&nbsp;{{ format_text($truyen->tu) }} </span>
-                        </div>
-                        <div class="col-md-2 col-3">
-                            <span ><i class="fa fa-gift"></i>&nbsp;{{ format_text($truyen->gift) }} </span>
-                        </div>
-                    </div>
-                    <p class="mt-2 p-2 left">{!! $truyen_sub->gioi_thieu !!}</p>
+                    @include('modal.modal_truyen')
+                    <p class="mt-2 pl-4 pr-4" style="text-align: left;">{!! $truyen_sub->gioi_thieu !!}</p>
                 </div>
             </div>
         </div>

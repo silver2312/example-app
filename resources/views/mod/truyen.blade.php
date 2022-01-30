@@ -75,7 +75,7 @@ use App\Models\Truyen\TruyenSub;
                         <td><a href="{{ url('trang-ca-nhan/'.$value->nguoi_nhung) }}">{{check_name($value->nguoi_nhung)}}</a></td>
                         <td>{{$value->so_chuong}} - {{$value->tong_like}} - {{$value->dislike}} - {{$value->tu}} - {{$value->curr_gif}} /  {{$value->gift}}</td>
                         <td>{{$value->time_suf}} /  {{$value->time_up}}</td>
-                        <td>@if($value->de_cu == 0)<a href="{{url('mod/truyen/de-cu/'.$value->id)}}" class="btn btn-sm btn-primary" onclick="return confirm('Bạn có chắc muốn đề cử truyện này không ?')">Đề cử</a>@else Truyện đang được đề cử @endif</td>
+                        <td>@if($value->de_cu == 0)<a href="{{url('mod/truyen/de-cu/'.$value->id)}}" class="btn btn-sm btn-primary" onclick="return confirm('Bạn có chắc muốn đề cử truyện này không ?')">Đề cử</a>@else <a href="{{url('mod/truyen/xoa-de-cu/'.$value->id)}}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá đề cử truyện này không ?')">Xoá đề cử</a> @endif</td>
                     </tr>
                     <!-- Modal -->
                     <div class="modal fade" id="gioi_thieu_{{$value->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
