@@ -316,10 +316,10 @@ class SuDungItemController extends Controller
                 save_thongtin($data_thongtin,$uid);
                 return Redirect()->back()->with('status','Dùng '.$data['so_luong'].' Tinh chất trường sinh. Thọ nguyên gia tăng '.number_format($tho_nguyen*$data['so_luong']).' điểm');
             }
-            //quà đền bù
-            elseif($item_id == 14){
-                $user->ngan_te = $user->ngan_te + 1000;
-                $user->save();
+            // đổi thể chất
+            elseif($item_id == 16){
+                $chung_toc_id = $data_nhanvat[0]['chung_toc_id'];
+                $the_chat_id = random_thechat($chung_toc_id);
                 $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] - 1;
                 try{
                     $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + 1;
@@ -327,12 +327,57 @@ class SuDungItemController extends Controller
                     $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = 1;
                 }
                 save_tuido($data_tuido,$uid);
-                $now = strtotime(Carbon::now('Asia/Ho_Chi_Minh'));
-                $data_tieuphi = data_tieuphi($uid);
-                $data_tieuphi[$now]['text'] = "Bạn nhận được 1000 ngân tệ.";
-                $data_tieuphi[$now]['so_du'] = number_format($user->dong_te,2)." đồng tệ, ".number_format($user->ngan_te,2)." ngân tệ, ".number_format($user->kim_te,2)." kim tệ, ".number_format($user->me,2)." ME.";
-                save_tieuphi($data_tieuphi,$uid);
-                return Redirect()->back()->with('status','Đã dùng quà đền bù thành công. Bạn nhận được 1000 ngân tệ.');
+                $data_nhanvat[0]['the_chat_id'] = $the_chat_id;
+                save_nhanvat($data_nhanvat,$uid);
+                return Redirect()->back()->with('status',"Thể chất hiện tại của bạn là: ".TheChatModel::find($the_chat_id)->ten_the_chat);
+            }
+            // đổi thể chất
+            elseif($item_id == 17){
+                //thêm kim
+                    $kim = mt_rand(10000,50000);
+                //thêm me
+                    $me = random(0.01);
+                //thể chất
+                    try{
+                        $data_tuido[0]['tuido_vannang'][16]['so_luong'] = $data_tuido[0]['tuido_vannang'][16]['so_luong'] + 10;
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_vannang'][16]['so_luong'] = 10;
+                    }
+                //trường sinh
+                    try{
+                        $data_tuido[0]['tuido_vannang'][11]['so_luong'] = $data_tuido[0]['tuido_vannang'][11]['so_luong'] + 10;
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_vannang'][11]['so_luong'] = 10;
+                    }
+                //vip
+                    try{
+                        $data_tuido[0]['tuido_vannang'][2]['so_luong'] = $data_tuido[0]['tuido_vannang'][2]['so_luong'] + 2;
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_vannang'][2]['so_luong'] = 2;
+                    }
+                //tịnh tâm
+                    try{
+                        $data_tuido[0]['tuido_vannang'][8]['so_luong'] = $data_tuido[0]['tuido_vannang'][8]['so_luong'] + 8;
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_vannang'][8]['so_luong'] = 8;
+                    }
+                $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] - 1;
+                try{
+                    $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + 1;
+                }catch(Throwable $e){
+                    $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = 1;
+                }
+                save_tuido($data_tuido,$uid);
+                $user->kim_te = $user->kim_te + $kim;
+                if($me == 0){
+                    $them_me = 1;
+                }else{
+                    $them_me = 0;
+                }
+                $user->me = $user->me + $them_me;
+                $user->save();
+                $text = "Bạn nhân được: ".number_format($kim)." Kim, ".number_format($them_me)." Me".", ".number_format(10)." Thể chất thay đổi tạp, ".number_format(10)." Tinh chất trường sinh, ".number_format(2)." thẻ Vip, ".number_format(8)." Tịnh tâm đan";
+                return Redirect()->back()->with('status',$text);
             }
             else{
                 return redirect()->back()->with('error','Đồ này chưa được sử dụng.');

@@ -32,7 +32,7 @@ function format_num($num){
     if($num > $max){
         $num = $num;
     }else{
-        $num = number_format($num);
+        $num = number_format($num,2);
     }
     return $num;
 }

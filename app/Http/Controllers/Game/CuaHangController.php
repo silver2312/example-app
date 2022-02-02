@@ -102,8 +102,8 @@ class CuaHangController extends Controller
         //quà tân thủ
         if($item_id == 10){
             $data_tan_thu = data_tanthu();
-            if(empty($data_tan_thu[$uid])){
-                $data_tan_thu[$uid]['so_luong'] = 1;
+            if(empty($data_tan_thu[$uid][$item_id])){
+                $data_tan_thu[$uid][$item_id]['so_luong'] = 1;
                 save_tanthu($data_tan_thu);
                 try{
                     $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = 1;
@@ -114,19 +114,19 @@ class CuaHangController extends Controller
                 return redirect()->back()->with('error','Bạn đã mua vật phẩm này rồi.');
             }
         }
-        elseif($item_id == 14){
-            if(isset($data_tuido[0]['tuido_vannang'][$item_id])){
-                return redirect()->back()->with('error','Bạn đã mua vật phẩm này rồi.');
-            }else{
-                if($uid <= 2571){
-                    try{
-                        $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = 1;
-                    }catch(Throwable $e){
-                        return Redirect()->back()->with('error','Lỗi hệ thống.');
-                    }
-                }else{
-                    return redirect()->back()->with('error','Bạn không trong diện đền bù.');
+        //quà tết 2022
+        elseif($item_id == 17){
+            $data_tan_thu = data_tanthu();
+            if(empty($data_tan_thu[$uid][$item_id])){
+                $data_tan_thu[$uid][$item_id]['so_luong'] = 1;
+                save_tanthu($data_tan_thu);
+                try{
+                    $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = 1;
+                }catch(Throwable $e){
+                    return Redirect()->back()->with('error','Lỗi hệ thống.');
                 }
+            }else{
+                return redirect()->back()->with('error','Bạn đã mua quà nguyên đán 2022 rồi.');
             }
         }
         //item thường

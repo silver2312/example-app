@@ -1,0 +1,37 @@
+[
+    {
+        "tuido_vannang": {
+            "10": {
+                "so_luong": 0,
+                "su_dung": 2
+            },
+            "2": {
+                "so_luong": 8
+            },
+            "6": {
+                "so_luong": 2
+            },
+            "7": {
+                "so_luong": 2,
+                "su_dung": 4
+            },
+            "8": {
+                "so_luong": 28
+            },
+            "9": {
+                "so_luong": 2
+            },
+            "16": {
+                "so_luong": 53,
+                "su_dung": 57
+            },
+            "17": {
+                "so_luong": 0,
+                "su_dung": 1
+            },
+            "11": {
+                "so_luong": 10
+            }
+        }
+    }
+]

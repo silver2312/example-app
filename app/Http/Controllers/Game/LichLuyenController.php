@@ -246,10 +246,11 @@ class LichLuyenController extends Controller
         //exp cấp tiếp theo
             if($last->exp == 1){
                 $data_thongtin[0]['exp_nextlevel'] = $data_thongtin[0]['exp_nextlevel'] * $data_thongtin[0]['exp_nextlevel'];
+                $data_thongtin[0]['exp_dubi_nextlevel'] = $data_thongtin[0]['exp_dubi_nextlevel']*10;
             }else{
                 $data_thongtin[0]['exp_nextlevel'] = $data_thongtin[0]['exp_nextlevel'] * $last->exp;
+                $data_thongtin[0]['exp_dubi_nextlevel'] = $data_thongtin[0]['exp_dubi_nextlevel']*2;
             }
-            $data_thongtin[0]['exp_dubi_nextlevel'] = sqrt($data_thongtin[0]['exp_nextlevel']);
         //end exp cấp tiếp theo
         //lực
             if($next->buff_luc == 1){

@@ -119,7 +119,7 @@ class TuLuyenController extends Controller
         $data_thongtin[0]['exp_hientai'] = 0;
         $data_thongtin[0]['exp_nextlevel'] = 100;
         $data_thongtin[0]['exp_dubi_hientai'] = 0;
-        $data_thongtin[0]['exp_dubi_nextlevel'] = sqrt($data_thongtin[0]['exp_nextlevel']);
+        $data_thongtin[0]['exp_dubi_nextlevel'] = 1000;
         $data_thongtin[0]['tam_canh'] = 100;
         if($chung_toc->max_thonguyen > 0){
             $data_thongtin[0]['tho_nguyen'] = mt_rand($chung_toc->max_thonguyen/2,$chung_toc->max_thonguyen);

@@ -33,8 +33,8 @@ use App\Models\User;
                     <tr>
                         <th scope="row">{{$key++}}</th>
                         <th scope="row">{{$value->id}}</th>
-                        <td>{{User::find($value->uid)->name}} [{{$value->uid}}]</td>
-                        <td>{{User::find($value->id_nhan)->name}} [{{$value->id_nhan}}]</td>
+                        <td>{{check_name($value->uid)}} [{{$value->uid}}]</td>
+                        <td>{{check_name($value->id_nhan)}} [{{$value->id_nhan}}]</td>
                         <td>@if(empty($value->noi_dung) && $value->status == 0) <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#rep_{{$value->id}}">Thêm trả lời</a> @else {{$value->noi_dung}} @endif</td>
                         <td>@if($value->phuong_thuc == 1 ) MOMO @elseif($value->phuong_thuc == 2) Paypal @else Ngân hàng @endif</td>
                         <td>{{$value->ma_giao_dich}}</td>
