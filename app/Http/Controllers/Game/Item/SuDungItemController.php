@@ -135,13 +135,14 @@ class SuDungItemController extends Controller
                     return redirect()->back()->with('error','Bạn đã có nghề nghiệp.');
                 }
                 //trừ túi đô
-                    $i = 1;
+                    $i = 0;
                     while($i < $data['so_luong']){
-                        $result = random(0.001);
+                        $result = random(0.005);
                         if($result == 0){
                             break;
+                        }else{
+                            $i++;
                         }
-                        $i++;
                     }
                     try{
                         $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + $i;
@@ -331,7 +332,7 @@ class SuDungItemController extends Controller
                 save_nhanvat($data_nhanvat,$uid);
                 return Redirect()->back()->with('status',"Thể chất hiện tại của bạn là: ".TheChatModel::find($the_chat_id)->ten_the_chat);
             }
-            // đổi thể chất
+            // đổi quà tết
             elseif($item_id == 17){
                 //thêm kim
                     $kim = mt_rand(10000,50000);
@@ -378,6 +379,47 @@ class SuDungItemController extends Controller
                 $user->save();
                 $text = "Bạn nhân được: ".number_format($kim)." Kim, ".number_format($them_me)." Me".", ".number_format(10)." Thể chất thay đổi tạp, ".number_format(10)." Tinh chất trường sinh, ".number_format(2)." thẻ Vip, ".number_format(8)." Tịnh tâm đan";
                 return Redirect()->back()->with('status',$text);
+            }
+            //trận sư
+            elseif($item_id == 12){
+                if($data_nhanvat[0]['nangluong_id'] != 2){
+                    return redirect()->back()->with('error','Bạn phải tu linh khí.');
+                }
+                if($data_thongtin[0]['tri'] < 300){
+                    return redirect()->back()->with('error','Bạn phải có ít nhất 300 trí lực mới thi được.');
+                }
+                if($data_nhanvat[0]['nghenghiep_id'] != null){
+                    return redirect()->back()->with('error','Bạn đã có nghề nghiệp.');
+                }
+                //trừ túi đô
+                    $i = 0;
+                    while($i < $data['so_luong']){
+                        $result = random(0.005);
+                        if($result == 0){
+                            break;
+                        }else{
+                            $i++;
+                        }
+                    }
+                    try{
+                        $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + $i;
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $i;
+                    }
+                    $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] - $i;
+                    save_tuido( $data_tuido,$uid);
+                //end trừ túi đồ
+                if($result == 1){
+                    return redirect()->back()->with('error','Chúc bạn may mắn lần sau.');
+                }else{
+                    $data_nhanvat[0]['nghenghiep_id'] = 3;
+                    $data_nhanvat[0]['level_nghenghiep'] = 1;
+                    $data_nhanvat[0]['exp_nghenghiep_hientai'] = 0;
+                    $nghe_nghiep = ChiTietNgheNghiepModel::where('nghenghiep_id',3)->where('level',2)->first();
+                    $data_nhanvat[0]['exp_nghenghiep_max'] = $nghe_nghiep->exp;
+                    save_nhanvat($data_nhanvat,$uid);
+                    return Redirect()->back()->with('status','Sau '.$i.' lần bạn đã trở thành trận pháp sư.');
+                }
             }
             else{
                 return redirect()->back()->with('error','Đồ này chưa được sử dụng.');

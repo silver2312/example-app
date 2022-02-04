@@ -10,6 +10,11 @@ use App\Models\User;
 use App\Models\Session;
 use App\Models\Profile;
 use App\Models\Truyen\Truyen;
+use App\Models\Game\ChungTocModel;
+use App\Models\Game\NangLuongModel;
+use App\Models\Game\TheChatModel;
+use App\Models\PathAll;
+use App\Models\Game\HeModel;
 
 include('extensions/function.php');
 /*
@@ -244,6 +249,7 @@ Route::prefix('creator')->middleware('checkpwd2','verified','auth','creator')->g
         Route::post('/khuyen-mai/{id}', [App\Http\Controllers\Creator\Item\NapTienController::class, 'khuyen_mai']);
     });
     Route::post('thong-bao-home', [App\Http\Controllers\ThongBaoController::class, 'index']);
+    Route::post('thong-bao-tu-luyen', [App\Http\Controllers\ThongBaoController::class, 'tu_luyen']);
 });
 Route::prefix('mod')->middleware('checkpwd2','verified','auth','mod')->group(function () {
     Route::prefix('the-loai')->group(function () {
@@ -265,79 +271,108 @@ Route::prefix('mod')->middleware('checkpwd2','verified','auth','mod')->group(fun
     });
 });
 //không cần đăng nhập
-    Route::get('truyen/{host}/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'index']);
-    Route::get('truyen/{host}/{id}/fetch_data', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'fetch_data']);
-    Route::get('truyen/{host}/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'chapter'])->middleware('auth');
-    Route::get('dsc/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
-    Route::get('trans/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'trans']);
-    Route::get('truyen/cap-nhat', [App\Http\Controllers\HomeController::class, 'update']);
-    Route::get('truyen/tim-kiem', [App\Http\Controllers\HomeController::class, 'tim_kiem']);
+    Route::prefix('/')->group(function () {
+        Route::prefix('tu-luyen/huong-dan')->group(function () {
+            Route::get('danh-sach-chung-toc', function () {
+                $chung_toc = ChungTocModel::orderBy('ty_le','desc')->where('ty_le','>',0.00025)->get();
+                $nang_luong = NangLuongModel::get();
+                $the_chat = TheChatModel::get();
+                $path =  PathAll::first();
+                $data_chungtoc = data_chungtoc();
+                $path_chungtoc = $path->path_chungtoc;
+                return view('chung_toc', compact('chung_toc', 'nang_luong', 'the_chat', 'data_chungtoc', 'path_chungtoc'));
+            });
+            Route::get('danh-sach-the-chat', function () {
+                $the_chat = TheChatModel::orderBy('ty_le','desc')->get();
+                $he = HeModel::get();
+                return view('the_chat')->with(compact('the_chat','he'));
+            });
+        });
 
 
-    Route::prefix('trang-ca-nhan')->group(function () {
-        Route::get('/{id}', [App\Http\Controllers\ProfileController::class, 'index']);
-    });
-    Route::get('/check-truyen', function () {
-        try{
-            $truyen = Truyen::get();
-            foreach($truyen as $key => $value){
-                if(isset($value->link)){
-                    $data_theloai = data_theloai($value->id);
-                    try{
-                        $count = count($data_theloai);
-                    }catch (Throwable $e){
-                        $count = 0;
-                    }
-                    if($count == 0){
-                        $truyen1 = Truyen::find($value->id);
-                        $url = get_url($truyen1->nguon,$truyen1->link);
-                        $client = new Client();
-                        $crawler = $client->request('GET', $url);
-                        get_the_loai($truyen1->nguon,$crawler,$value->id);
-                    }
-                    $data_tag = data_tag($value->id);
-                    try{
-                        $count = count($data_tag);
-                    }catch (Throwable $e){
-                        $count = 0;
-                    }
-                    if($count == 0){
-                        $data_tag[1]['ten'] = "khác";
-                        save_tag($data_tag,$value->id);
+
+        Route::prefix('truyen')->group(function () {
+            Route::get('{host}/{id}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'index']);
+            Route::get('{host}/{id}/fetch_data', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'fetch_data']);
+            Route::get('{host}/{id}/{position}', [App\Http\Controllers\Truyen\TruyenAuthController::class, 'chapter'])->middleware('auth');
+            Route::get('cap-nhat', [App\Http\Controllers\HomeController::class, 'update']);
+            Route::get('tim-kiem', [App\Http\Controllers\HomeController::class, 'tim_kiem']);
+        });
+        Route::get('dsc/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'dsc']);
+        Route::get('trans/{host}/{id}', [App\Http\Controllers\Truyen\NhungController::class, 'trans']);
+
+        Route::prefix('trang-ca-nhan')->group(function () {
+            Route::get('/{id}', [App\Http\Controllers\ProfileController::class, 'index']);
+        });
+        Route::get('/check-truyen', function () {
+            try{
+                $truyen = Truyen::get();
+                foreach($truyen as $key => $value){
+                    if(isset($value->link)){
+                        $data_theloai = data_theloai($value->id);
+                        try{
+                            $count = count($data_theloai);
+                        }catch (Throwable $e){
+                            $count = 0;
+                        }
+                        if($count == 0){
+                            $truyen1 = Truyen::find($value->id);
+                            $url = get_url($truyen1->nguon,$truyen1->link);
+                            $client = new Client();
+                            $crawler = $client->request('GET', $url);
+                            get_the_loai($truyen1->nguon,$crawler,$value->id);
+                        }
+                        $data_tag = data_tag($value->id);
+                        try{
+                            $count = count($data_tag);
+                        }catch (Throwable $e){
+                            $count = 0;
+                        }
+                        if($count == 0){
+                            $data_tag[1]['ten'] = "khác";
+                            save_tag($data_tag,$value->id);
+                        }
                     }
                 }
+            }catch (Throwable $e){
+                echo "Lỗi thể loại<br>";
             }
-        }catch (Throwable $e){
-            echo "Lỗi thể loại<br>";
-        }
-        try{
-            check_nhung();
-            check_truyen_sub();
-        }catch (Throwable $e){
-            echo "Die<br>";
-        }
-    });
-    Route::get('/check-user', function () {
-        try{
-            check_file();
-        }catch (Throwable $e){
-            echo "Die<br>";
-        }
-        if(Auth::check()){
             try{
-                check_log();
-            }catch(Throwable $e){
-                echo "TEST";
+                check_nhung();
+                check_truyen_sub();
+            }catch (Throwable $e){
+                echo "Die<br>";
             }
-        }
-        echo "OK";
+        });
+        Route::get('/check-user', function () {
+            try{
+                check_file();
+                echo "File OK   <br>";
+            }catch (Throwable $e){
+                echo "File Err<br>";
+            }
+            if(Auth::check()){
+                try{
+                    check_log();
+                    echo "LOG OK   <br>";
+                }catch(Throwable $e){
+                    echo "Log Err<br>";
+                }
+            }
+            try{
+                check_chuyendo();
+                echo "chuyển OK   <br>";
+            }catch(Throwable $e){
+                echo "chuyển Err<br>";
+            }
+        });
+        Route::get('bang-xep-hang-tu-luyen', function () {
+            $user = User::orderBy('level_tuluyen','desc')->where('level_tuluyen','>',0)->orderBy('phan_tram','desc')->take(10)->get();
+            return view('tu_luyen.bxh')->with(compact('user'));
+        });
+        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     });
-    Route::get('bang-xep-hang-tu-luyen', function () {
-        $user = User::orderBy('level_tuluyen','desc')->where('level_tuluyen','>',0)->orderBy('phan_tram','desc')->take(10)->get();
-        return view('tu_luyen.bxh')->with(compact('user'));
-    });
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //không cần đăng nhập
 Auth::routes(['verify' => true]);
 

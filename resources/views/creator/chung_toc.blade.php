@@ -1,19 +1,11 @@
 @extends('layouts.app')
 @section('title', 'Creator chủng tộc')
-@section('script')
-    <script src="{{ asset('assets/vendor/datatables.net-select/js/dataTables.select.min.js')}}"></script>
-@endsection
 @section('content')
 <?php
 use App\Models\Game\NangLuongModel;
 use App\Models\Game\TheChatModel;
 ?>
-<style>
-    .table td, .table th{
-        white-space:inherit;
-    }
-</style>
-<div class="col-12 mt-2">
+<div class="container mt-5">
     <a href="#!" class="btn btn-primary" style="margin-left:20px;margin-bottom:20px;" data-toggle="modal" data-target="#them_chung_toc">Thêm Chủng tộc</a>
     {{-- Thêm chung_toc --}}
     <div class="modal fade" id="them_chung_toc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -256,5 +248,6 @@ use App\Models\Game\TheChatModel;
             </tbody>
         </table>
     </div>
+    {{ $chung_toc->links('vendor.pagination.simple-default') }}
 </div>
 @endsection

@@ -2,7 +2,7 @@
 @section('title', 'Creator thiên kiếp')
 @section('content')
 
-<div class="col-12 mt-2">
+<div class="container mt-5">
     <a href="#!" class="btn btn-primary" style="margin-left:20px;margin-bottom:20px;" data-toggle="modal" data-target="#them_thienkiep">Thêm thiên kiếp</a>
     {{-- Thêm thiên kiếp --}}
     <div class="modal fade" id="them_thienkiep" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

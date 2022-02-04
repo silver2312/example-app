@@ -54,7 +54,7 @@ use App\Models\Game\ThienKiepModel;
             </div>
         </div>
         <div id="thong_tin" class="ml-3 mb-3">
-            @if(isset($uid) || Auth::user()->level == 0)
+            @if(isset($uid) || ( Auth::check() && Auth::user()->level == 0) )
                 <span><span class="heading">Tài sản</span> : {{number_format($user->dong_te)}} đồng tệ , {{number_format($user->ngan_te)}} ngân tệ , {{number_format($user->kim_te)}} kim tệ , {{number_format($user->me)}} ME</span><br>
             @endif
             <span><span class="heading">Tâm cảnh</span> : {{format_num($data_thongtin[0]['tam_canh'])}}</span><br>

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Goutte\Client;
 use hisorange\BrowserDetect\Parser as Browser;
 use Stevebauman\Location\Facades\Location;
+use App\Models\Game\Item\ChuyenItem;
 use App\Models\Truyen\Truyen;
 use App\Models\Truyen\PathTruyen;
 use App\Models\Truyen\TruyenSub;
@@ -271,6 +272,9 @@ function tu_vong($uid){
         unset($data_congphap[0]);
         save_congphap($data_congphap,$uid);
     }
+    $user = User::find($uid);
+    $user->kim_te = $user->kim_te - 1000;
+    $user->save();
     unset($data_thongtin[0]);
     unset($data_tuido[0]);
     unset($data_nhanvat[0]);
@@ -791,5 +795,14 @@ function get_the_loai($host,$crawler,$id_truyen){
         }
     }else{
         return 0;
+    }
+}
+function check_chuyendo(){
+    $chuyen_do = ChuyenItem::get();
+    foreach($chuyen_do as $key => $value){
+        $chuyen_do_num = ChuyenItem::find($value->id);
+        if(empty(User::find($chuyen_do_num->id_gui)) ){
+            $chuyen_do_num->delete();
+        }
     }
 }

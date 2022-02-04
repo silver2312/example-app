@@ -37,7 +37,7 @@
                         <div class="collapse" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#!" class="nav-link">Login</a>
+                                <a href="#!" class="nav-link" data-toggle="modal" data-target="#huong_dan">Hướng dẫn</a>
                             </li>
                         </ul>
                         </div>

@@ -6,7 +6,7 @@
         white-space:inherit;
     }
 </style>
-<div class="col-12 mt-2">
+<div class="container mt-5">
     <a href="#!" class="btn btn-primary" style="margin-left:20px;margin-bottom:20px;" data-toggle="modal" data-target="#them_nang_luong">Thêm năng lượng</a>
     {{-- Thêm năng lượng --}}
     <div class="modal fade" id="them_nang_luong" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -83,6 +83,7 @@
             </tbody>
         </table>
     </div>
+    {{ $nang_luong->links('vendor.pagination.simple-default') }}
 </div>
 
 @endsection

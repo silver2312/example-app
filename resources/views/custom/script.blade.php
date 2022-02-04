@@ -170,6 +170,7 @@
     </script>
 {{-- end modal close --}}
 @yield('script_ll')
+@yield('script_tl')
 @guest
     @include('custom.ads')
 @else

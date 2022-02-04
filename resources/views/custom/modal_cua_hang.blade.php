@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title heading" id="exampleModalLabel">Cửa hàng nguyên liệu</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
@@ -20,7 +20,7 @@
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title heading" id="exampleModalLabel">Cửa hàng vạn năng</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -36,7 +36,7 @@
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title heading" id="exampleModalLabel">Cửa hàng đột phá</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         </div>
@@ -52,7 +52,7 @@
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title heading" id="exampleModalLabel">Cửa hàng công pháp</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         </div>

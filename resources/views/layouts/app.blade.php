@@ -46,14 +46,17 @@
 </head>
 <body class="g-sidenav-hidden">
     <style>
-    .img_custom{
-        height:236px;
-    }
-    @media (max-width: 479px) {
         .img_custom{
-            height:140px;
+            height:236px;
         }
-    }
+        @media (max-width: 479px) {
+            .img_custom{
+                height:140px;
+            }
+        }
+        .table td, .table th{
+            white-space:inherit;
+        }
     </style>
     @auth
         @include('navbar.user.auth.left')

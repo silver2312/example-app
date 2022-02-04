@@ -57,7 +57,7 @@ $dot_pha = DotPhaModel::where('status',1)->get();
                             <div class="modal-content">
                                 <div class="modal-header">
                                 <h5 class="modal-title heading" id="exampleModalLabel">{{$value->ten}}</h5>
-                                <button type="button" class="close"  onclick="close_cuahang_dp_{{$value->id}}()" aria-label="Close">
+                                <button type="button" class="btn btn-sm btn-danger"  onclick="close_cuahang_dp_{{$value->id}}()" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                                 </div>

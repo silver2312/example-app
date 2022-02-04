@@ -4,7 +4,7 @@
 <?php
 use App\Models\Game\HeModel;
 ?>
-<div class="col-12 mt-2">
+<div class="container mt-5">
     <a href="#!" class="btn btn-primary" style="margin-left:20px;margin-bottom:20px;" data-toggle="modal" data-target="#them_the_chat">Thêm thể chất</a>
     {{-- Thêm thể chất --}}
     <div class="modal fade" id="them_the_chat" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -125,23 +125,23 @@ use App\Models\Game\HeModel;
                                                 <input type="text" class="form-control" name="ty_le" value="{{$value_thechat->ty_le}}">
                                             </div>
                                             <div class="form-group col-2">
-                                                <label>Thêm lực</label>
+                                                <label>Lực</label>
                                                 <input type="number" step="any" class="form-control" name="buff_luc" value="{{$value_thechat->buff_luc}}">
                                             </div>
                                             <div class="form-group col-2">
-                                                <label>Thêm bền</label>
+                                                <label>Bền</label>
                                                 <input type="number" step="any" class="form-control" name="buff_ben" value="{{$value_thechat->buff_ben}}">
                                             </div>
                                             <div class="form-group col-2">
-                                                <label>Thêm trí</label>
+                                                <label>Trí</label>
                                                 <input type="number" step="any" class="form-control" name="buff_tri" value="{{$value_thechat->buff_tri}}">
                                             </div>
                                             <div class="form-group col-2">
-                                                <label>Thêm mẫn</label>
+                                                <label>Mẫn</label>
                                                 <input type="number" step="any" class="form-control" name="buff_man" value="{{$value_thechat->buff_man}}">
                                             </div>
                                             <div class="form-group col-2">
-                                                <label>Hút exp</label>
+                                                <label>Exp</label>
                                                 <input type="number" step="any" class="form-control" name="buff_exp" value="{{$value_thechat->buff_exp}}">
                                             </div>
                                         </div>
@@ -156,6 +156,7 @@ use App\Models\Game\HeModel;
             </tbody>
         </table>
     </div>
+    {{ $the_chat->links('vendor.pagination.simple-default') }}
 </div>
 
 @endsection

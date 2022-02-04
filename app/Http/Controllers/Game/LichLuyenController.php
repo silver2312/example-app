@@ -83,7 +83,7 @@ class LichLuyenController extends Controller
         echo Carbon::now('Asia/Ho_Chi_Minh');
         if($now - $data_thongtin[0]['time'] >= 60){
             if($data_thongtin[0]['tho_nguyen'] > 0){
-                $data_thongtin[0]['tho_nguyen'] = $data_thongtin[0]['tho_nguyen'] - 1/12;
+                $data_thongtin[0]['tho_nguyen'] = $data_thongtin[0]['tho_nguyen'] - 0.02;
             }
             if($data_thongtin[0]['trang_thai'] == "Trọng thương"){
                 $ben = pow($data_thongtin[0]['ben'],10);
@@ -98,7 +98,11 @@ class LichLuyenController extends Controller
                 if($data_thongtin[0]['status'] == 0){
                     echo "<h3 style='color:green'>Đang lịch luyện.</h3>";
                     //trừ tinh lực
-                        $data_thongtin[0]['ben_hentai'] = $data_thongtin[0]['ben_hentai'] - $data_thongtin[0]['ben'] * 0.1;
+                        if($data_thongtin[0]['tho_nguyen'] > 0){
+                            $data_thongtin[0]['ben_hentai'] = $data_thongtin[0]['ben_hentai'] - $data_thongtin[0]['ben'] * 0.05;
+                        }else{
+                            $data_thongtin[0]['ben_hentai'] = $data_thongtin[0]['ben_hentai'] - $data_thongtin[0]['ben'] * 0.1;
+                        }
                     //end trừ tinh lực
                     // hút exp
                         $curr_exp = $data_thongtin[0]['hut_exp'];
