@@ -375,4 +375,34 @@ class TuLuyenController extends Controller
         return redirect()->back()->with('status','Xóa lịch sử tiêu phí thành công.');
 
     }
+    public function exp_nghenghiep(Request $request){
+        $uid = Auth::user()->id;
+        $data_nhanvat = data_nhanvat($uid);
+        $data_thongtin = data_thongtin($uid);
+        if(empty($data_nhanvat[0]) || empty($data_thongtin[0]) ){
+            return redirect()->back()->with('error','Bạn chưa có nhân vật hoặc thông tin nào.');
+        }
+        if($data_nhanvat[0]['nghenghiep_id'] == null){
+            return redirect()->back()->with('error','Bạn chưa học nghề nào.');
+        }
+        $data = $request->validate([
+            'exp' => 'required|numeric|min:1',
+        ],
+        [
+            'exp.required' => 'Bạn chưa nhập exp.',
+            'exp.numeric' => 'exp phải là số.',
+            'exp.min' => 'exp phải lớn hơn 0.',
+        ]);
+        if($data['exp'] > $data_thongtin[0]['exp_dubi_hientai']){
+            return redirect()->back()->with('error','Bạn không đủ exp để thêm.');
+        }
+        if($data_nhanvat[0]['exp_nghenghiep_hientai'] >= $data_nhanvat[0]['exp_nghenghiep_max']){
+            return redirect()->back()->with('error','Bạn đã đạt đủ exp nghề này.');
+        }
+        $data_thongtin[0]['exp_dubi_hientai'] = $data_thongtin[0]['exp_dubi_hientai'] - $data['exp'];
+        save_thongtin($data_thongtin,$uid);
+        $data_nhanvat[0]['exp_nghenghiep_hientai'] = $data_nhanvat[0]['exp_nghenghiep_hientai'] + $data['exp'];
+        save_nhanvat($data_nhanvat,$uid);
+        return redirect()->back()->with('status','Thêm exp thành công.');
+    }
 }

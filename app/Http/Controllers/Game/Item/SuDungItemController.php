@@ -138,10 +138,9 @@ class SuDungItemController extends Controller
                     $i = 0;
                     while($i < $data['so_luong']){
                         $result = random(0.005);
+                        $i++;
                         if($result == 0){
                             break;
-                        }else{
-                            $i++;
                         }
                     }
                     try{
@@ -319,18 +318,27 @@ class SuDungItemController extends Controller
             }
             // đổi thể chất
             elseif($item_id == 16){
+                $curr_thechat = $data_nhanvat[0]['the_chat_id'];
                 $chung_toc_id = $data_nhanvat[0]['chung_toc_id'];
-                $the_chat_id = random_thechat($chung_toc_id);
-                $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] - 1;
+                $i = 0;
+                while($i < $data['so_luong']){
+                    $result = random_thechat($chung_toc_id);
+                    $i++;
+                    if($result != $curr_thechat){
+                        break;
+                    }
+                }
+                $the_chat_id = $result;
+                $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] - $i;
                 try{
-                    $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + 1;
+                    $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + $i;
                 }catch(Throwable $e){
-                    $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = 1;
+                    $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $i;
                 }
                 save_tuido($data_tuido,$uid);
                 $data_nhanvat[0]['the_chat_id'] = $the_chat_id;
                 save_nhanvat($data_nhanvat,$uid);
-                return Redirect()->back()->with('status',"Thể chất hiện tại của bạn là: ".TheChatModel::find($the_chat_id)->ten_the_chat);
+                return Redirect()->back()->with('status',"Dùng ".$i." thẻ .Thể chất hiện tại của bạn là: ".TheChatModel::find($the_chat_id)->ten_the_chat);
             }
             // đổi quà tết
             elseif($item_id == 17){
@@ -395,10 +403,9 @@ class SuDungItemController extends Controller
                     $i = 0;
                     while($i < $data['so_luong']){
                         $result = random(0.005);
+                        $i++;
                         if($result == 0){
                             break;
-                        }else{
-                            $i++;
                         }
                     }
                     try{
@@ -420,6 +427,20 @@ class SuDungItemController extends Controller
                     save_nhanvat($data_nhanvat,$uid);
                     return Redirect()->back()->with('status','Sau '.$i.' lần bạn đã trở thành trận pháp sư.');
                 }
+            }
+            // tụ linh sơ
+            elseif($item_id == 18){
+                $data_thongtin[0]['exp_hientai'] = $data_thongtin[0]['exp_hientai'] + 1000 * $data['so_luong'];
+                //trừ túi đô
+                    try{
+                        $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + $data['so_luong'];
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data['so_luong'];
+                    }
+                    $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] = $data_tuido[0]['tuido_vannang'][$item_id]['so_luong'] - $data['so_luong'];
+                    save_tuido( $data_tuido,$uid);
+                    save_thongtin($data_thongtin,$uid);
+                return redirect()->back()->with('status','Bạn đã nhận được '.(1000*$data['so_luong']).' điểm exp.');
             }
             else{
                 return redirect()->back()->with('error','Đồ này chưa được sử dụng.');

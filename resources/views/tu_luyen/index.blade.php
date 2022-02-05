@@ -53,7 +53,10 @@ use App\Models\Game\ChiTiet\ChiTietNgheNghiepModel;
                                                         $nghe_nghiep = NgheNghiepModel::where('id',$data_nhanvat[0]['nghenghiep_id'])->first();
                                                         $chitiet_nghenghiep = ChiTietNgheNghiepModel::where('nghenghiep_id',$data_nhanvat[0]['nghenghiep_id'])->where('level',$data_nhanvat[0]['level_nghenghiep'])->first();
                                                         ?>
-                                                        <a  rel="tooltip" data-placement="bottom" data-html="true" title="Exp: {{$data_nhanvat[0]['exp_nghenghiep_hientai'].' / '.$data_nhanvat[0]['exp_nghenghiep_max']}}">{{$nghe_nghiep->ten}} • <span class="{{$chitiet_nghenghiep->css}} ">{{$chitiet_nghenghiep->ten}}</span></a><br>
+                                                        <a href="#!" data-toggle="modal" data-target="#nghe_nghiep_exp"  rel="tooltip" data-placement="bottom" data-html="true" title="Exp: {{$data_nhanvat[0]['exp_nghenghiep_hientai'].' / '.$data_nhanvat[0]['exp_nghenghiep_max']}}">{{$nghe_nghiep->ten}} • <span class="{{$chitiet_nghenghiep->css}} ">{{$chitiet_nghenghiep->ten}}</span></a><br>
+                                                        @if(isset($uid))
+                                                            @include('tu_luyen.modal_tuluyen')
+                                                        @endif
                                                     @endif
                                                     <span><span class="heading">Tốc độ tu luyện</span> : {{ format_num($data_thongtin[0]['hut_exp']) }} exp/phút</span><br>
                                                 </div>

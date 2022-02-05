@@ -109,6 +109,9 @@ Route::group(['middleware'=>['auth','verified']], function(){
                     Route::post('chuyen/{item_id}', [App\Http\Controllers\Game\Item\ChuyenItemController::class, 'cong_phap']);
                 });
             });
+            Route::prefix('nghe-nghiep')->group(function () {
+                Route::post('exp', [App\Http\Controllers\Game\TuLuyenController::class, 'exp_nghenghiep']);
+            });
         });
         Route::prefix('trang-ca-nhan')->group(function () {
             Route::post('doi-ma-cap-2', [App\Http\Controllers\ProfileController::class, 'doi_mac2']);

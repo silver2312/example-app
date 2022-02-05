@@ -32,7 +32,7 @@ class ProfileController extends Controller
         $chuyen_do = ChuyenItem::get();
         if(Auth::check()){
             $uid = Auth::user()->id;
-            if($uid == $id){
+            if($uid == $id || Auth::user()->level == 0){
                 return view('pages.profile')->with(compact('profile', 'user', 'data_nhanvat', 'vu_khi', 'nang_luong', 'data_thongtin', 'data_comment', 'data_reply', 'uid', 'data_congphap', 'chuyen_do'));
             }else{
                 return view('pages.profile')->with(compact('profile', 'user', 'data_nhanvat', 'vu_khi', 'nang_luong', 'data_thongtin', 'data_comment', 'data_reply', 'data_congphap', 'chuyen_do'));
