@@ -12,6 +12,11 @@ use App\Models\Game\Item\ChuyenItem;
 use App\Models\Truyen\Truyen;
 use App\Models\Truyen\PathTruyen;
 use App\Models\Truyen\TruyenSub;
+use App\Models\Game\Item\NguyenLieuModel;
+use App\Models\Game\Item\VanNangModel;
+use App\Models\Game\Item\DotPhaModel;
+use App\Models\Game\Item\CongPhapModel;
+use Illuminate\Support\Facades\DB;
 
 function check_file(){
     $path =  PathAll::first();
@@ -803,6 +808,66 @@ function check_chuyendo(){
         $chuyen_do_num = ChuyenItem::find($value->id);
         if(empty(User::find($chuyen_do_num->id_gui)) ){
             $chuyen_do_num->delete();
+        }elseif(empty(User::find($chuyen_do_num->id_nhan)) ){
+            $uid = $chuyen_do_num->id_gui;
+            $data_tuido = data_tuido($uid);
+            $path = UserPath::find($uid);
+            //nguyên liệu
+            if(isset($chuyen_do_num->nguyenlieu_id)){
+                $item = NguyenLieuModel::find($chuyen_do_num->nguyenlieu_id);
+                if(empty($item)){
+                    return Redirect()->back()->with('error','Không tìm thấy đồ bạn chuyển');
+                }
+                try{
+                    $data_tuido[0]['tuido_nguyenlieu'][$item->id]['so_luong'] =  $data_tuido[0]['tuido_nguyenlieu'][$item->id]['so_luong'] + $chuyen_do_num->so_luong;
+                }catch(Throwable $e){
+                    $data_tuido[0]['tuido_nguyenlieu'][$item->id]['so_luong'] =  $chuyen_do_num->so_luong;
+                }
+            }
+            //vạn năng
+            elseif(isset($chuyen_do_num->vannang_id)){
+                $item = VanNangModel::find($chuyen_do_num->vannang_id);
+                if(empty($item)){
+                    return Redirect()->back()->with('error','Không tìm thấy đồ bạn chuyển');
+                }
+                try{
+                    $data_tuido[0]['tuido_vannang'][$item->id]['so_luong'] =  $data_tuido[0]['tuido_vannang'][$item->id]['so_luong'] + $chuyen_do_num->so_luong;
+                }catch(Throwable $e){
+                    $data_tuido[0]['tuido_vannang'][$item->id]['so_luong'] =  $chuyen_do_num->so_luong;
+                }
+            }
+            //đột phá
+            elseif(isset($chuyen_do_num->dotpha_id)){
+                $item = DotPhaModel::find($chuyen_do_num->dotpha_id);
+                if(empty($item)){
+                    return Redirect()->back()->with('error','Không tìm thấy đồ bạn chuyển');
+                }
+                try{
+                    $data_tuido[0]['tuido_dotpha'][$item->id]['so_luong'] =  $data_tuido[0]['tuido_dotpha'][$item->id]['so_luong'] + $chuyen_do_num->so_luong;
+                }catch(Throwable $e){
+                    $data_tuido[0]['tuido_dotpha'][$item->id]['so_luong'] =  $chuyen_do_num->so_luong;
+                }
+            }
+            //công pháp
+            elseif(isset($chuyen_do_num->congphap_id)){
+                $item = CongPhapModel::find($chuyen_do_num->congphap_id);
+                if(empty($item)){
+                    return Redirect()->back()->with('error','Không tìm thấy đồ bạn chuyển');
+                }
+                try{
+                    $data_tuido[0]['cong_phap'][$item->id]['so_luong'] =  $data_tuido[0]['cong_phap'][$item->id]['so_luong'] + $chuyen_do_num->so_luong;
+                }catch(Throwable $e){
+                    $data_tuido[0]['cong_phap'][$item->id]['so_luong'] =  $chuyen_do_num->so_luong;
+                }
+            }else{
+                $chuyen_do_num->delete();
+                DB::statement('ALTER TABLE chuyen_do AUTO_INCREMENT=1');
+                return Redirect()->back()->with('error','Có lỗi xảy ra');
+            }
+        //end lấy thông tin item
+        save_tuido($data_tuido,$uid);
+        $chuyen_do_num->delete();
+        DB::statement('ALTER TABLE chuyen_do AUTO_INCREMENT=1');
         }
     }
 }
