@@ -45,6 +45,9 @@
         "tuido_nguyenlieu": {
             "17": {
                 "so_luong": 91
+            },
+            "15": {
+                "so_luong": 445
             }
         },
         "tuido_dotpha": {
@@ -53,6 +56,18 @@
             },
             "7": {
                 "so_luong": 6
+            },
+            "32": {
+                "so_luong": 0,
+                "su_dung": 10
+            },
+            "33": {
+                "so_luong": 1,
+                "su_dung": 10
+            },
+            "34": {
+                "so_luong": 0,
+                "su_dung": 10
             }
         }
     }

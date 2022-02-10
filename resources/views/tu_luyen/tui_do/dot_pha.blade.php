@@ -53,6 +53,7 @@ $data_tuido_dotpha = data_tuido($uid);
                                                 <input type="number" step="any" min="0" class="form-control" name="kim_te" value="0">
                                             </div>
                                         </div>
+                                        <button type="button" class="btn btn-secondary" onclick="su_dung_dotpha_{{$key_dotpha}}()">Sử dụng</button>
                                         <button type="button" class="btn btn-success" onclick="ban_dotpha{{$key_dotpha}}()">Bán shop</button>
                                         <button type="button" class="btn btn-info" onclick="chuyen_dotpha{{$key_dotpha}}()">Chuyển</button>
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -63,6 +64,13 @@ $data_tuido_dotpha = data_tuido($uid);
                     </div>
                     {{-- end form nguyên liệu --}}
                     <script>
+                        // sử dụng đột phá
+                        function su_dung_dotpha_{{$key_dotpha}}(){
+                            if( confirm("Bạn chắc chắn muốn sử dụng không?") == true ){
+                                document.getElementById("form_dp_{{$key_dotpha}}").action = "{{url('tu-luyen/cua-hang/dot-pha/su-dung/'.$key_dotpha)}}";
+                                document.getElementById("form_dp_{{$key_dotpha}}").submit();
+                            }
+                        }
                         //bán
                         function ban_dotpha{{$key_dotpha}}(){
                             if( confirm("Bạn chắc chắn muốn bán không?") == true ){

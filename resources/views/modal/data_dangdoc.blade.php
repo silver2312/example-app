@@ -41,9 +41,9 @@ try{
                                     <small><a style="color:red;" href="{{ url('truyen/'.$truyen->nguon.'/'.$key.'/'.$value['chapter']) }}">{{ $data_chapter[$value['chapter']]['header_sub'] }}</a></small>
                                 @endif
                             </td>
-                            <td><a href="#!" onclick="del_dangdoc()" class="btn btn-sm btn-danger">X</a></td>
+                            <td><a href="#!" onclick="del_dangdoc_{{$key}}()" class="btn btn-sm btn-danger">X</a></td>
                             <script>
-                                function del_dangdoc(){
+                                function del_dangdoc_{{$key}}(){
                                     var http = new XMLHttpRequest();
                                     var url = '{{url("truyen/del-dang-doc/".$key)}}';
                                     http.open('GET', url, true);

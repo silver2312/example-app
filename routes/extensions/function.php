@@ -28,11 +28,12 @@ function get_level($level,$id){
     echo $text;
 }
 function format_num($num){
-    $max= 100000000000000000;
-    if($num > $max){
+    $findme = 'E';
+    $pos = strpos((string)$num, $findme);
+    if($pos > 0){
         $num = $num;
     }else{
-        $num = number_format($num,2);
+        $num = number_format($num,1);
     }
     return $num;
 }

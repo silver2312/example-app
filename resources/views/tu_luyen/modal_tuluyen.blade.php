@@ -7,10 +7,10 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <form action="{{ url('tu-luyen/nghe_nghiep/exp') }}" method="POST">
+                    <form action="{{ url('tu-luyen/nghe-nghiep/exp') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <span>Exp trận: {{$data_nhanvat[0]['exp_nghenghiep_hientai'].'/'.$data_nhanvat[0]['exp_nghenghiep_max']}} - </span>
+                            <span>Exp trận: {{ format_num($data_nhanvat[0]['exp_nghenghiep_hientai']).'/'.format_num($data_nhanvat[0]['exp_nghenghiep_max'])}} - </span>
                             <span>Exp đa dụng: {{ format_num($data_thongtin[0]['exp_dubi_hientai']) }} - </span>
                             <span>IQ cần: {{ format_num(pow(300 , ($data_nhanvat[0]['level_nghenghiep'] +1))) }}</span>
                         </div>
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" onclick="return confirm('Bạn có chắc chắn không?')">Thêm</button>
-                        <a href="#!" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn không?')">Lên cấp</a>
+                        <a href="{{ url('tu-luyen/nghe-nghiep/exp-up') }}" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn không?')">Lên cấp</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </form>
                 </div>

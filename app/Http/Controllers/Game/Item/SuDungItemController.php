@@ -21,6 +21,85 @@ use App\Models\Game\HeModel;
 
 class SuDungItemController extends Controller
 {
+    public function dot_pha(Request $request,$item_id){
+        $data = $request->validate([
+            'so_luong' => 'required|numeric|min:1',
+            'ma_c2' => 'required|max:10'
+        ],[
+            'so_luong.required' => 'Bạn chưa nhập số lượng',
+            'so_luong.numeric' => 'Số lượng phải là số',
+            'so_luong.min' => 'Số lượng phải lớn hơn 0',
+            'ma_c2.required' => 'Bạn chưa nhập mã c2',
+            'ma_c2.max' => 'Mã c2 không được vượt quá 10 ký tự'
+        ]);
+        $uid = Auth::user()->id;
+        $user = User::find($uid);
+        $data_nhanvat = data_nhanvat($uid);
+        $data_thongtin = data_thongtin($uid);
+        $data_tuido = data_tuido($uid);
+        $item = DotPhaModel::find($item_id);
+        check_data($item);
+        //check
+            if(Hash::check($data['ma_c2'],$user->ma_c2) == false){
+                return redirect()->back()->with('error','Mã cấp 2 không đúng.');
+            }
+            if(empty($data_thongtin[0]) || empty($data_nhanvat[0])){
+                return redirect()->back()->with('error','Chưa có nhân vật.');
+            }
+            if($data_thongtin[0]['level'] < $item->level){
+                return redirect()->back()->with('error','Nhân vật cần cấp độ '.$item->level.' để sử dụng.');
+            }
+        //end check
+        //end khai báo
+        if(empty($data_tuido[0]['tuido_dotpha'][$item_id]) || $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] <= 0 ){
+            return redirect()->back()->with('error','Không có đồ dùng cái gì.');
+        }else{
+            //tịnh tâm đan
+            if($item_id == 32){
+                $tam_canh = mt_rand(1,30)* $data['so_luong'];
+                $data_thongtin[0]['tam_canh'] = $data_thongtin[0]['tam_canh'] + $tam_canh;
+                try{
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] + $data['so_luong'];
+                }catch(Throwable $e){
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data['so_luong'];
+                }
+                $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] = $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] - $data['so_luong'];
+                save_thongtin($data_thongtin,$uid);
+                save_tuido($data_tuido,$uid);
+                return Redirect()->back()->with('status','Dùng '.$data['so_luong'].' Tịnh Tâm đan. Tâm cảnh gia tăng '.$tam_canh.' điểm');
+            }
+            //tinh chất trường sinh
+            elseif($item_id == 33){
+                $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] = $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] - $data['so_luong'];
+                try{
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] + $data['so_luong'];
+                }catch(Throwable $e){
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data['so_luong'];
+                }
+                $tho_nguyen = mt_rand(1,5);
+                $data_thongtin[0]['tho_nguyen'] = $data_thongtin[0]['tho_nguyen'] + $tho_nguyen*$data['so_luong'];
+                save_tuido($data_tuido,$uid);
+                save_thongtin($data_thongtin,$uid);
+                return Redirect()->back()->with('status','Dùng '.$data['so_luong'].' Tinh chất trường sinh. Thọ nguyên gia tăng '.number_format($tho_nguyen*$data['so_luong']).' điểm');
+            }
+            //tụ linh sơ
+            elseif($item_id == 34){
+                $data_thongtin[0]['exp_hientai'] = $data_thongtin[0]['exp_hientai'] + 1000 * $data['so_luong'];
+                //trừ túi đô
+                    try{
+                        $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] + $data['so_luong'];
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data['so_luong'];
+                    }
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] = $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] - $data['so_luong'];
+                    save_tuido( $data_tuido,$uid);
+                    save_thongtin($data_thongtin,$uid);
+                return redirect()->back()->with('status','Bạn đã nhận được '.(1000*$data['so_luong']).' điểm exp.');
+            }else{
+                return redirect()->back()->with('error','Không thể dùng đồ này.');
+            }
+        }
+    }
     public function van_nang(Request $request,$item_id){
         $data = $request->validate([
             'so_luong' => 'required|numeric|min:1',
@@ -232,7 +311,7 @@ class SuDungItemController extends Controller
             }
             //tịnh tâm đan
             elseif($item_id == 8){
-                $tam_canh = mt_rand(1,50)* $data['so_luong'];
+                $tam_canh = mt_rand(1,30)* $data['so_luong'];
                 $data_thongtin[0]['tam_canh'] = $data_thongtin[0]['tam_canh'] + $tam_canh;
                 try{
                     $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] = $data_tuido[0]['tuido_vannang'][$item_id]['su_dung'] + $data['so_luong'];
@@ -493,6 +572,7 @@ class SuDungItemController extends Controller
                 return Redirect()->back()->with('error','Bạn đã tử vong.');
             }
         //end check
+        //ghép công pháp
         if($item_id == 14){
             if($data_tuido[0]['tuido_nguyenlieu'][$item_id]['so_luong'] < 111 ){
                 return Redirect()->back()->with('error','Bạn chưa đủ tàn quyển công pháp để lĩnh ngộ.');
@@ -517,24 +597,6 @@ class SuDungItemController extends Controller
                 save_tuido($data_tuido,$uid);
                 return redirect()->back()->with('status','Bạn đã lĩnh ngộ được '.CongPhapModel::find($result)->ten.'.');
             }
-        }elseif($item_id == 15){
-            if($data_tuido[0]['tuido_nguyenlieu'][$item_id]['so_luong'] < 111 ){
-                return Redirect()->back()->with('error','Bạn chưa đủ Trường sinh thảo để lĩnh ngộ.');
-            }
-            $result = random(0.1);
-            $data_tuido[0]['tuido_nguyenlieu'][$item_id]['so_luong'] = $data_tuido[0]['tuido_nguyenlieu'][$item_id]['so_luong'] - 111;
-            if($result == 0){
-                try{
-                    $data_tuido[0]['tuido_vannang'][11]['so_luong'] = $data_tuido[0]['tuido_vannang'][11]['so_luong'] + 1;
-                }catch(Throwable $e){
-                    $data_tuido[0]['tuido_vannang'][11]['so_luong'] = 1;
-                }
-                save_tuido($data_tuido,$uid);
-                return redirect()->back()->with('status','Bạn nhận được 1 Tinh chất trường sinh.');
-            }else{
-                save_tuido($data_tuido,$uid);
-                return redirect()->back()->with('error','Thất bại là mẹ thành công.');
-            }
         }else{
             //check xem cần nghề nghiệp Không
                 $item_dotpha = DotPhaModel::where('nguyenlieu_id',$item_id)->first();
@@ -556,7 +618,12 @@ class SuDungItemController extends Controller
                         return Redirect()->back()->with('error','Bạn chưa có hoặc sai nghề nghiệp.');
                     }
                 }
-                $result = random(0.5);
+                if($item_id == 15){
+                    $tyle = 0.2;
+                }else{
+                    $tyle =0.3;
+                }
+                $result = random($tyle);
             //end check nghề nghiệp
             if($result == 0){
                 $data_tuido[0]['tuido_nguyenlieu'][$item_id]['so_luong'] = $data_tuido[0]['tuido_nguyenlieu'][$item_id]['so_luong'] - $item_dotpha->so_luong*$data['so_luong'];

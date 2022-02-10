@@ -88,11 +88,15 @@ class LichLuyenController extends Controller
             if($data_thongtin[0]['trang_thai'] == "Trọng thương"){
                 $ben = pow($data_thongtin[0]['ben'],10);
                 $data_thongtin[0]['ben_hentai'] -= $ben;
-                echo "<p>Dùng ".format_num($ben)." tinh lực để hồi phục trọng thương.</p>";
+                $data_thongtin[0]['trang_thai'] = "Hoàn mỹ";
+                save_thongtin($data_thongtin,$uid);
+                return "<p>Dùng ".format_num($ben)." tinh lực để hồi phục trọng thương.</p>";
             }elseif($data_thongtin[0]['trang_thai'] == "Tiểu thương"){
                 $ben = pow($data_thongtin[0]['ben'],2);
                 $data_thongtin[0]['ben_hentai'] -= $ben;
-                echo "<p>Dùng ".format_num($ben)." tinh lực để hồi phục tiểu thương.</p>";
+                $data_thongtin[0]['trang_thai'] = "Hoàn mỹ";
+                save_thongtin($data_thongtin,$uid);
+                return "<p>Dùng ".format_num($ben)." tinh lực để hồi phục tiểu thương.</p>";
             }else{
                 $data_thongtin[0]['trang_thai'] = "Hoàn mỹ";
                 if($data_thongtin[0]['status'] == 0){
@@ -167,7 +171,7 @@ class LichLuyenController extends Controller
                 }else{
                     echo "<h3>Đang bế quan</h3><br>";
                     $ben = $data_thongtin[0]['ben'];
-                    if($user->level > 4 && $user->level <=10){
+                    if($user->level > 4){
                         $tinh_luc = $ben * 0.05;
                     }elseif($user->level >= 3){
                         $tinh_luc = $ben * 0.15;

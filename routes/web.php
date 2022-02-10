@@ -99,6 +99,7 @@ Route::group(['middleware'=>['auth','verified']], function(){
                 });
                 Route::prefix('dot-pha')->group(function () {
                     Route::post('/{item_id}', [App\Http\Controllers\Game\CuaHangController::class, 'dot_pha']);
+                    Route::post('su-dung/{item_id}', [App\Http\Controllers\Game\Item\SuDungItemController::class, 'dot_pha']);
                     Route::post('ban/{item_id}', [App\Http\Controllers\Game\Item\BanItemController::class, 'dot_pha']);
                     Route::post('chuyen/{item_id}', [App\Http\Controllers\Game\Item\ChuyenItemController::class, 'dot_pha']);
                 });
@@ -111,6 +112,7 @@ Route::group(['middleware'=>['auth','verified']], function(){
             });
             Route::prefix('nghe-nghiep')->group(function () {
                 Route::post('exp', [App\Http\Controllers\Game\TuLuyenController::class, 'exp_nghenghiep']);
+                Route::get('exp-up', [App\Http\Controllers\Game\TuLuyenController::class, 'exp_up']);
             });
         });
         Route::prefix('trang-ca-nhan')->group(function () {

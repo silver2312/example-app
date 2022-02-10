@@ -405,4 +405,27 @@ class TuLuyenController extends Controller
         save_nhanvat($data_nhanvat,$uid);
         return redirect()->back()->with('status','Thêm exp thành công.');
     }
+    public function exp_up(){
+        $uid = Auth::user()->id;
+        $data_nhanvat = data_nhanvat($uid);
+        $data_thongtin = data_thongtin($uid);
+        if(empty($data_nhanvat[0]) || empty($data_thongtin[0]) ){
+            return redirect()->back()->with('error','Bạn chưa có nhân vật hoặc thông tin nào.');
+        }
+        if($data_nhanvat[0]['nghenghiep_id'] == null){
+            return redirect()->back()->with('error','Bạn chưa học nghề nào.');
+        }
+        if($data_nhanvat[0]['exp_nghenghiep_hientai'] < $data_nhanvat[0]['exp_nghenghiep_max']){
+            return redirect()->back()->with('error','Bạn chưa đạt đủ exp nghề này.');
+        }
+        $tri_luc = pow(300 , ($data_nhanvat[0]['level_nghenghiep'] +1));
+        if($data_thongtin[0]['tri'] < $tri_luc){
+            return redirect()->back()->with('error','Bạn chưa đủ IQ để thêm.');
+        }
+        $data_nhanvat[0]['level_nghenghiep'] = $data_nhanvat[0]['level_nghenghiep'] + 1;
+        $data_nhanvat[0]['exp_nghenghiep_hientai'] = 0;
+        $data_nhanvat[0]['exp_nghenghiep_max'] = pow($data_nhanvat[0]['exp_nghenghiep_max'],2);
+        save_nhanvat($data_nhanvat,$uid);
+        return redirect()->back()->with('status','Lên cấp thành công thành công.');
+    }
 }

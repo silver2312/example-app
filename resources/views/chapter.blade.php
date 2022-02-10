@@ -1,7 +1,12 @@
 @extends('layouts.app')
 @section('title', $header)
 @section('content')
-
+<style>
+    img{
+        width: 100%;
+        height: 100%;
+    }
+</style>
     <div class="container mt-5">
         <div class="row">
             <div class="card">

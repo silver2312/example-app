@@ -110,12 +110,12 @@
         <ul class="navbar-nav align-items-center ml-auto ml-md-0">
         <li class="nav-item dropdown">
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <div class="media align-items-center">
-                    <img src="{{ url(Auth::user()->u_image) }}" style="width:60px;height:60px;border-radius: 50%;" class="img-thumbnail">
-                <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm  font-weight-bold">{{Auth::user()->name}}</span>
+                <div class="media align-items-center">
+                        <img src="{{ url(Auth::user()->u_image) }}" style="width:60px;height:60px;border-radius: 50%;" class="img-thumbnail">
+                    <div class="media-body ml-2 d-none d-lg-block">
+                    <span class="mb-0 text-sm  font-weight-bold">{{Auth::user()->name}}</span>
+                    </div>
                 </div>
-            </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
             <div class="dropdown-header noti-title">

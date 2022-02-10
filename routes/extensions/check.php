@@ -738,7 +738,7 @@ function get_data_chapter($position,$data_chapter,$truyen){
         $get_url1 = "http://vietphrase.info/VietPhrase/Browser?url=".$get_url."&script=false&t=VP";
         $crawler1 = $client->request('GET', $get_url1);
         try{
-            $str1 = $crawler1->filter('#readContent_set > div.readDetail')->html();
+            $str1 = $crawler1->filter('#readContent_set > div.readDetail > div.read_chapterDetail')->html();
         }catch(Throwable $e){
             return 0;
         }
