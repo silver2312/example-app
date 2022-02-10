@@ -30,10 +30,19 @@ function get_level($level,$id){
 function format_num($num){
     $findme = 'E';
     $pos = strpos((string)$num, $findme);
+    $crr = $num;
     if($pos > 0){
-        $num = $num;
+        $f1 = explode('E', (string)$num)[0];
+        $f2 = explode('E', (string)$num)[1];
+        $num = number_format((float)$f1).'E'.$f2;
     }else{
         $num = number_format($num,1);
+        $f2 = explode('.', (string)$num)[1];
+        if($f2 == '0'){
+            $num = number_format($crr);
+        }else{
+            $num = $num;
+        }
     }
     return $num;
 }
