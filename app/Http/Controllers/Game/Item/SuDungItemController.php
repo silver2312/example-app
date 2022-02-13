@@ -95,7 +95,45 @@ class SuDungItemController extends Controller
                     save_tuido( $data_tuido,$uid);
                     save_thongtin($data_thongtin,$uid);
                 return redirect()->back()->with('status','Bạn đã nhận được '.(1000*$data['so_luong']).' điểm exp.');
-            }else{
+            }
+            //sơ cấp tăng lực đan
+            elseif($item_id == 35){
+                if($data_thongtin[0]['ben_hentai'] >= 0){
+                    return redirect()->back()->with('error','Bạn vẫn còn tinh lực.');
+                }
+                $data_thongtin[0]['ben_hentai'] +=  $data_thongtin[0]['ben'] * $data['so_luong'] * 0.2;
+                //trừ túi đô
+                    try{
+                        $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] + $data['so_luong'];
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data['so_luong'];
+                    }
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] = $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] - $data['so_luong'];
+                    save_tuido( $data_tuido,$uid);
+                    save_thongtin($data_thongtin,$uid);
+                return redirect()->back()->with('status','Bạn đã hồi '.($data_thongtin[0]['ben'] * $data['so_luong'] * 0.2).' tinh lực.');
+            }
+            //thần cấp tăng lực đan
+            elseif($item_id == 36){
+                if($data_thongtin[0]['ben_hentai'] >= 0){
+                    return redirect()->back()->with('error','Bạn vẫn còn tinh lực.');
+                }
+                if($data_thongtin[0]['level'] < $item->level){
+                    return redirect()->back()->with('error','Bạn không đủ cấp để dùng.');
+                }
+                $data_thongtin[0]['ben_hentai'] =  $data_thongtin[0]['ben'];
+                //trừ túi đô
+                    try{
+                        $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] + 1;
+                    }catch(Throwable $e){
+                        $data_tuido[0]['tuido_dotpha'][$item_id]['su_dung'] = 1;
+                    }
+                    $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] = $data_tuido[0]['tuido_dotpha'][$item_id]['so_luong'] - 1;
+                    save_tuido( $data_tuido,$uid);
+                    save_thongtin($data_thongtin,$uid);
+                return redirect()->back()->with('status','Đã hồi lại toàn bộ tinh lực.');
+            }
+            else{
                 return redirect()->back()->with('error','Không thể dùng đồ này.');
             }
         }

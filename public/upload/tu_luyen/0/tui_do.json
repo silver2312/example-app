@@ -68,6 +68,14 @@
             "34": {
                 "so_luong": 0,
                 "su_dung": 10
+            },
+            "35": {
+                "so_luong": 993,
+                "su_dung": 7
+            },
+            "36": {
+                "so_luong": 999,
+                "su_dung": 1
             }
         }
     }

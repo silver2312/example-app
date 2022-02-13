@@ -37,6 +37,10 @@ class TruyenAuthController extends Controller
     }
     public function chapter($host,$id,$position){
         $truyen = Truyen::find($id);
+        $truyen_sub = TruyenSub::find($id);
+        if(empty($truyen_sub)){
+            $truyen_sub = $truyen;
+        }
         check_data($truyen);
         if($truyen->nguon != $host){
             return redirect()->back()->with('error', 'Truyện đã bị lỗi.');
@@ -83,7 +87,7 @@ class TruyenAuthController extends Controller
         }catch(\Exception $e){
             $header = $data_chapter[$position]['header'];
         }
-        return view('chapter')->with(compact('truyen','user','data_chapter','position','min','max','header'));
+        return view('chapter')->with(compact('truyen','user','data_chapter','position','min','max','header','truyen_sub'));
     }
     public function cua_toi(){
         $truyen = Truyen::orderBy('time_up', 'desc')->where('nguoi_nhung',auth()->user()->id)->paginate(21);

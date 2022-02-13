@@ -34,7 +34,7 @@ function format_num($num){
     if($pos > 0){
         $f1 = explode('E', (string)$num)[0];
         $f2 = explode('E', (string)$num)[1];
-        $num = number_format((float)$f1).'E'.$f2;
+        $num = number_format((float)$f1,1).'E'.$f2;
     }else{
         $num = number_format($num,1);
         $f2 = explode('.', (string)$num)[1];

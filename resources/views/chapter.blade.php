@@ -6,11 +6,15 @@
         width: 100%;
         height: 100%;
     }
+    p{
+        font-weight: 600 !important;
+    }
 </style>
     <div class="container mt-5">
         <div class="row">
             <div class="card">
                 <div class="card-header text-center border-0 pb-0">
+                    <h3 class="card-title" style="text-transform: capitalize;">{{ $truyen_sub->tieu_de }}</h3>
                     <h3 class="card-title" style="text-transform: capitalize;">{{ $header }}</h3>
                     <div>
                         <a class="btn btn-sm btn-primary" href="{{ url('truyen/'.$truyen->nguon.'/'.$truyen->id.'/'.$min) }}"><i class="ni ni-bold-left"></i></a>

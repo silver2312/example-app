@@ -26,7 +26,7 @@ $dot_pha = DotPhaModel::where('status',1)->get();
                 ?>
                 <tr>
                     <td>{{$key+1}}</td>
-                    <td><a href="#!" rel="tooltip" data-html="true" data-title="{!! $value->gioi_thieu !!}">{{$value->ten}}</a></td>
+                    <td><a href="#!" rel="tooltip" data-html="true" title="{!! $value->gioi_thieu !!}">{{$value->ten}}</a></td>
                     <td>{{$id_nghenghiep->ten}} / <?php
                         $chitiet_nghenghiep = ChiTietNgheNghiepModel::where('nghenghiep_id',$value->nghenghiep_id)->get();
                         try{
