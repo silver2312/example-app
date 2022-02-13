@@ -28,7 +28,7 @@ $cong_phap = CongPhapModel::where('status',1)->get();
                 ?>
                 <tr>
                     <th scope="row">{{$key+1}}</th>
-                    <td><a href="#!" rel="tooltip" data-html="true" title="{!! $value->gioi_thieu !!}">{{$value->ten}}</a></td>
+                    <td><a href="#!" data-toggle="tooltip" data-html="true" title="{!! $value->gioi_thieu !!}">{{$value->ten}}</a></td>
                     <td>
                         <?php
                             if($value['dong_te'] != 0){

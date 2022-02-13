@@ -17,7 +17,7 @@ $nguyen_lieu = NguyenLieuModel::where('status',1)->get();
             @foreach($nguyen_lieu as $key => $value)
                 <tr>
                     <td>{{$key+1}}</td>
-                    <td><a href="#!" rel="tooltip" data-html="true" title="{!! $value->gioi_thieu !!}">{{$value->ten}}</a></td>
+                    <td><a href="#!" data-toggle="tooltip" data-html="true" title="{!! $value->gioi_thieu !!}">{{$value->ten}}</a></td>
                     <td><?php
                         if($value['dong_te'] != 0){
                             echo number_format($value['dong_te']).' đồng tệ ';
